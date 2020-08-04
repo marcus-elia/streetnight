@@ -38,4 +38,9 @@ std::vector<int> getChunkIDsAroundPoint(int chunkID, int radius);
 std::vector<Point2D> getChunkTopLeftCornersAroundPoint(int chunkID, int radius);
 
 int getChunkIDContainingPoint(Point p, int chunkSize);
+
+
+// Point operations
+void movePoint(Point &p, double deltaX, double deltaY, double deltaZ);
+void rotatePointAroundPoint(Point &p, const Point &pBase, double thetaX, double thetaY, double thetaZ);
 #endif //FPS_TEMPLATE_MATHHELPER_H
