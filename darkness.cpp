@@ -2,7 +2,15 @@
 
 Darkness::Darkness()
 {
-
+    playerLoc = {0, 10, 0};
+    playerLook = {0, 10, -10};
+    depth = 300;
+    nearWidth = 100;
+    nearHeight = 100;
+    farWidth = 400;
+    farHeight = 400;
+    color = {0,0,0,1};
+    initializeCorners();
 }
 Darkness::Darkness(Point inputPlayerLoc, Point inputPlayerLook, double inputDepth, double inputNearWidth,
 double inputNearHeight, double inputFarWidth, double inputFarHeight, RGBAcolor inputColor)
@@ -75,14 +83,21 @@ void Darkness::draw() const
     drawPoint(corners[4]);
     drawPoint(corners[7]);
     // Right Face
+    setGLColor({1,0,0,1});
+    drawPoint(corners[5]);
+    drawPoint(corners[1]);
+    drawPoint(corners[2]);
+    drawPoint(corners[6]);
+    // Back face
+    setGLColor({1,1,0,1});
+    drawPoint(corners[4]);
     drawPoint(corners[5]);
     drawPoint(corners[6]);
-    drawPoint(corners[2]);
-    drawPoint(corners[1]);
-    // Back face
-    drawPoint(corners[4]);
     drawPoint(corners[7]);
-    drawPoint(corners[6]);
+    // Top face
+    drawPoint(corners[4]);
+    drawPoint(corners[0]);
+    drawPoint(corners[1]);
     drawPoint(corners[5]);
     glEnd();
 }

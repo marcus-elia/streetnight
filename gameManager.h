@@ -10,6 +10,7 @@
 #include "chunk.h"
 #include "mathHelper.h"
 #include "button.h"
+#include "darkness.h"
 
 enum GameStatus {Intro, Playing, End, Paused};
 
@@ -17,6 +18,8 @@ class GameManager
 {
 private:
     Player player;
+    Darkness darkness;
+
 
     // Controls
     bool wKey, aKey, sKey, dKey, spacebar;
@@ -69,6 +72,7 @@ public:
     void initializePlayer();
     void initializeButtons();
     void makeInstructions();
+    void makeDarkness();
 
     // Getters
     Player getPlayer() const;

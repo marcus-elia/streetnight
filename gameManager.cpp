@@ -23,6 +23,7 @@ GameManager::GameManager(int inputScreenWidth, int inputScreenHeight, int inputC
     updateCurrentChunks();
     initializeButtons();
     makeInstructions();
+    makeDarkness();
 }
 
 // =================================
@@ -56,6 +57,10 @@ void GameManager::initializeButtons()
 void GameManager::makeInstructions()
 {
     instructions.push_back("Use w,a,s,d to move and spacebar to jump. Press p to pause.");
+}
+void GameManager::makeDarkness()
+{
+    darkness = Darkness(player.getLocation(), player.getLookingAt(), 300, 100, 100, 400, 400, {0,0,0,1});
 }
 
 // ===========================
@@ -256,6 +261,7 @@ void GameManager::draw() const
         {
             c->draw();
         }
+        darkness.draw();
     }
 }
 
