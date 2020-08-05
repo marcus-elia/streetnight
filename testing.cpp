@@ -13,6 +13,7 @@ std::string testDistance2d();
 std::string testGetChunkIDsAroundPoint();
 std::string testGetChunkTopLeftCornersAroundPoint();
 std::string testGetChunkIDContainingPoint();
+std::string testTrueAngleDifference();
 
 int main()
 {
@@ -26,6 +27,7 @@ int main()
     results += testGetChunkIDsAroundPoint();
     results += testGetChunkTopLeftCornersAroundPoint();
     results += testGetChunkIDContainingPoint();
+    results += testTrueAngleDifference();
     std::cout << "\n" << results << std::endl;
     return 0;
 }
@@ -456,5 +458,63 @@ std::string testGetChunkIDContainingPoint()
         }
     }
 
+    return results;
+}
+
+std::string testTrueAngleDifference()
+{
+    std::cout << "\nTesting trueAngleDifference()" << std::endl;
+    std::string results = "";
+
+    std::vector<std::string> descriptions;
+    std::vector<double> angle1s;
+    std::vector<double> angle2s;
+    std::vector<double> exp;
+    double tolerance = 0.01;
+    double obs;
+
+    descriptions.emplace_back("Q1 - Q1");
+    angle1s.push_back(PI/4);
+    angle2s.push_back(PI/4);
+    exp.push_back(0.0);
+    descriptions.emplace_back("Q2 - Q1");
+    angle1s.push_back(PI/4);
+    angle2s.push_back(3*PI/4);
+    exp.push_back(PI/2);
+    descriptions.emplace_back("Q1 - Q2");
+    angle1s.push_back(3*PI/4);
+    angle2s.push_back(PI/4);
+    exp.push_back(PI/2);
+    descriptions.emplace_back("Q3 - Q1");
+    angle1s.push_back(PI/4);
+    angle2s.push_back(5*PI/4);
+    exp.push_back(PI);
+    descriptions.emplace_back("Q1 - Q3");
+    angle1s.push_back(5*PI/4);
+    angle2s.push_back(PI/4);
+    exp.push_back(PI);
+    descriptions.emplace_back("Q4 - Q1");
+    angle1s.push_back(PI/4);
+    angle2s.push_back(7*PI/4);
+    exp.push_back(PI/2);
+    descriptions.emplace_back("Q1 - Q4");
+    angle1s.push_back(7*PI/4);
+    angle2s.push_back(PI/4);
+    exp.push_back(PI/2);
+
+    for(int i = 0; i < descriptions.size(); i++)
+    {
+        obs = trueAngleDifference(angle1s[i], angle2s[i]);
+        if(std::abs(exp[i] - obs) > tolerance)
+        {
+            results += "F";
+            std::cout << "Test FAILED for " + descriptions[i] << std::endl;
+            std::cout << "Expected " << exp[i] << ", got  " << obs << std::endl;
+        }
+        else
+        {
+            results += ".";
+        }
+    }
     return results;
 }

@@ -183,3 +183,25 @@ void rotatePointAroundPoint(Point &p, const Point &pBase, double thetaX, double 
     p.y += pBase.y;
     p.z += pBase.z;
 }
+
+double trueAngleDifference(double angle1, double angle2)
+{
+    double theta = angle1 - angle2;
+    while(theta < 0)
+    {
+        theta += 2*PI;
+    }
+    if(theta > PI)
+    {
+        return 2*PI - theta;
+    }
+    return theta;
+
+}
+bool isInFieldOfView(Point target, Point location, double xzAngle, double yAngle, double fov)
+{
+    double angleDifXZ = atan2(target.z - location.z, target.x - location.x);
+    double angleDifY = atan2(target.y - location.y, distance2d(location, target));
+    return trueAngleDifference(angleDifXZ, xzAngle) < fov && trueAngleDifference(angleDifY, yAngle) < fov;
+}
+double determineLightIntensityAt(Point target, LightSource source);

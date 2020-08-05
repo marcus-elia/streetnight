@@ -43,4 +43,14 @@ int getChunkIDContainingPoint(Point p, int chunkSize);
 // Point operations
 void movePoint(Point &p, double deltaX, double deltaY, double deltaZ);
 void rotatePointAroundPoint(Point &p, const Point &pBase, double thetaX, double thetaY, double thetaZ);
+
+// Light sources
+// Return the difference between the two angles, taking into account the fact
+// that angles wrap around at 2PI
+double trueAngleDifference(double angle1, double angle2);
+bool isInFieldOfView(Point target, Point location, double xzAngle, double yAngle, double fov);
+double determineLightIntensityAt(Point target, LightSource source);
+
+
+
 #endif //FPS_TEMPLATE_MATHHELPER_H
