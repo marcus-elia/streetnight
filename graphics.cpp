@@ -274,3 +274,7 @@ void unCull()
 {
     glDisable(GL_CULL_FACE);
 }
+void setGLColorLightLevel(RGBAcolor color, double lightLevel)
+{
+    glColor4f(color.r*lightLevel, color.g*lightLevel, color.b*lightLevel, color.a);
+}

@@ -50,6 +50,7 @@ void mouse(int button, int state, int x, int y);
 void drawPoint(Point p);            // Calls glVertex3f
 void drawPoint2D(Point p);          // Calls glVertex2f on x and y
 void setGLColor(RGBAcolor color);   // Calls glColor4f
+void setGLColorLightLevel(RGBAcolor color, double lightLevel);
 void cull();                        // glEnable(GL_CULL_FACE)
 void unCull();                      // glDisable(GL_CULL_FACE)
 
