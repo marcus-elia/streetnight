@@ -575,5 +575,50 @@ std::string testIsInFieldOfView()
         results += ".";
     }
 
+    // On ground
+    target = {0, 0, -50};
+    xzAngle = 3*PI/2;
+    yAngle = 0;
+    fov = PI/6;
+    if(!isInFieldOfView(target, location, xzAngle, yAngle, fov))
+    {
+        results += "F";
+        std::cout << "Test FAILED for on ground" << std::endl;
+    }
+    else
+    {
+        results += ".";
+    }
+
+    // Far away on ground
+    target = {0, 0, -1024};
+    xzAngle = 3*PI/2;
+    yAngle = 0;
+    fov = PI/6;
+    if(!isInFieldOfView(target, location, xzAngle, yAngle, fov))
+    {
+        results += "F";
+        std::cout << "Test FAILED for far away on ground" << std::endl;
+    }
+    else
+    {
+        results += ".";
+    }
+
+    // 360 degree view
+    target = {1024, 0, 4096};
+    xzAngle = 3*PI/2;
+    yAngle = 0;
+    fov = 2*PI;
+    if(!isInFieldOfView(target, location, xzAngle, yAngle, fov))
+    {
+        results += "F";
+        std::cout << "Test FAILED for 360 degree view" << std::endl;
+    }
+    else
+    {
+        results += ".";
+    }
+
     return results;
 }
