@@ -38,6 +38,6 @@ public:
     Point getCenter() const;
     int getChunkID();
 
-    void draw() const;
+    void draw(double lightLevel) const;
 };
 #endif //FPS_TEMPLATE_CHUNK_H

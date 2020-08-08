@@ -11,6 +11,7 @@ GameManager::GameManager()
     updateCurrentChunks();
     initializeButtons();
     makeInstructions();
+    initializePlayerLight();
 }
 GameManager::GameManager(int inputScreenWidth, int inputScreenHeight, int inputChunkSize, int inputRenderRadius)
 {
@@ -23,6 +24,7 @@ GameManager::GameManager(int inputScreenWidth, int inputScreenHeight, int inputC
     updateCurrentChunks();
     initializeButtons();
     makeInstructions();
+    initializePlayerLight();
 }
 
 // =================================
@@ -56,6 +58,11 @@ void GameManager::initializeButtons()
 void GameManager::makeInstructions()
 {
     instructions.push_back("Use w,a,s,d to move and spacebar to jump. Press p to pause.");
+}
+
+void GameManager::initializePlayerLight()
+{
+    playerLight = {player.getLocation(), player.getXZAngle(), player.getYAngle(), PLAYER_LIGHT_FOV, MAX_LIGHT_LEVEL};
 }
 
 // ===========================
@@ -248,13 +255,24 @@ void GameManager::reactToMouseClick(int mx, int my)
     }
 }
 
+// ===============================
+//
+//           Lighting
+//
+// ===============================
+
+double GameManager::determineLightLevelAt(Point p) const
+{
+    return fmin(1.0, determineLightIntensityAt(p, playerLight, LIGHT_FADE_FACTOR) / MAX_LIGHT_LEVEL);
+}
+
 void GameManager::draw() const
 {
     if(currentStatus == Playing || currentStatus == Paused)
     {
         for(std::shared_ptr<Chunk> c : currentChunks)
         {
-            c->draw();
+            c->draw(determineLightLevelAt(c->getCenter()));
         }
     }
 }
@@ -282,6 +300,10 @@ void GameManager::playerTick()
         currentPlayerChunkID = newPlayerChunkID;
         updateCurrentChunks();
     }
+
+    playerLight.location = player.getLocation();
+    playerLight.xzAngle = player.getXZAngle();
+    playerLight.yAngle = player.getYAngle();
 }
 
 // Game Management

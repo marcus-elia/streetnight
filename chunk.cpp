@@ -44,9 +44,9 @@ int Chunk::getChunkID()
     return chunkID;
 }
 
-void Chunk::draw() const
+void Chunk::draw(double lightLevel) const
 {
-    setGLColor(groundColor);
+    setGLColorLightLevel(groundColor, lightLevel);
     glBegin(GL_QUADS);
     glVertex3f(center.x - sideLength/2, 0, center.z - sideLength/2);
     glVertex3f(center.x - sideLength/2, 0, center.z + sideLength/2);

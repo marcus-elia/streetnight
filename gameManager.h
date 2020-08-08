@@ -42,6 +42,9 @@ private:
     bool closeWindow = false;
     bool showMouse = true;
 
+    // Lighting
+    LightSource playerLight;
+
     // Game parameters
     double PLAYER_HEIGHT = 20;
     double PLAYER_RADIUS = 5;
@@ -61,6 +64,9 @@ private:
     RGBAcolor BUTTON_TEXT_COLOR = {1.0,1.0,1.0,1.0};      // White
     RGBAcolor CURSOR_COLOR = {0.3, 0.3, 0.3, 1.0};        // Dark Gray
     RGBAcolor BLACK = {0.0, 0.0, 0.0, 1.0};
+    double LIGHT_FADE_FACTOR = 0.001;
+    double PLAYER_LIGHT_FOV = PI/4;
+    int MAX_LIGHT_LEVEL = 10;
 public:
     GameManager();
     GameManager(int inputScreenWidth, int inputScreenHeight, int inputChunkSize, int inputRenderRadius);
@@ -69,6 +75,7 @@ public:
     void initializePlayer();
     void initializeButtons();
     void makeInstructions();
+    void initializePlayerLight();
 
     // Getters
     Player getPlayer() const;
@@ -88,8 +95,6 @@ public:
     void setAKey(bool input);
     void setSKey(bool input);
     void setDKey(bool input);
-    void setRKey(bool input);
-    void setCKey(bool input);
     void setSpacebar(bool input);
     void setCurrentStatus(GameStatus input);
 
@@ -105,6 +110,10 @@ public:
     void reactToMouseMovement(int mx, int my, double theta);
     void reactToMouseClick(int mx, int my);
 
+    // Lighting
+    double determineLightLevelAt(Point p) const;
+
+    // Draw
     void draw() const;
 
     // Tick helper functions
