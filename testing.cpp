@@ -14,6 +14,7 @@ std::string testGetChunkIDsAroundPoint();
 std::string testGetChunkTopLeftCornersAroundPoint();
 std::string testGetChunkIDContainingPoint();
 std::string testTrueAngleDifference();
+std::string testIsInFieldOfView();
 
 int main()
 {
@@ -28,6 +29,7 @@ int main()
     results += testGetChunkTopLeftCornersAroundPoint();
     results += testGetChunkIDContainingPoint();
     results += testTrueAngleDifference();
+    results += testIsInFieldOfView();
     std::cout << "\n" << results << std::endl;
     return 0;
 }
@@ -516,5 +518,62 @@ std::string testTrueAngleDifference()
             results += ".";
         }
     }
+    return results;
+}
+
+std::string testIsInFieldOfView()
+{
+    std::cout << "\nTesting isInFieldOfView()" << std::endl;
+    std::string results = "";
+
+    Point location = {0, 10, 0};
+    Point target;
+    double xzAngle, yAngle, fov;
+
+    // In field of view
+    target = {0, 10, -10};
+    xzAngle = 3*PI/2;
+    yAngle = 0;
+    fov = PI/4;
+    if(!isInFieldOfView(target, location, xzAngle, yAngle, fov))
+    {
+        results += "F";
+        std::cout << "Test FAILED for in field of view" << std::endl;
+    }
+    else
+    {
+        results += ".";
+    }
+
+    // Wrong on the xz plane
+    target = {10, 10, 0};
+    xzAngle = 3*PI/2;
+    yAngle = 0;
+    fov = PI/4;
+    if(isInFieldOfView(target, location, xzAngle, yAngle, fov))
+    {
+        results += "F";
+        std::cout << "Test FAILED for wrong on xz plane" << std::endl;
+    }
+    else
+    {
+        results += ".";
+    }
+
+    // Wrong in the y axis
+    target = {0, 100, -10};
+    xzAngle = 3*PI/2;
+    yAngle = 0;
+    fov = PI/4;
+    if(isInFieldOfView(target, location, xzAngle, yAngle, fov))
+    {
+        results += "F";
+        std::cout << "Test FAILED for wrong in the y axis" << std::endl;
+    }
+    else
+    {
+        results += ".";
+    }
+
     return results;
 }

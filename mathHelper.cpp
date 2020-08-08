@@ -213,13 +213,13 @@ bool isInFieldOfView(Point target, Point location, double xzAngle, double yAngle
 }
 double determineLightIntensityAt(Point target, LightSource source, double fadeFactor)
 {
-    if(!isInFieldOfView(target, *source.location, *source.xzAngle, *source.yAngle, source.fieldOfView))
+    if(!isInFieldOfView(target, source.location, source.xzAngle, source.yAngle, source.fieldOfView))
     {
         return 0;
     }
     else
     {
-        double d = distance3d(target, *source.location);
+        double d = distance3d(target, source.location);
         return source.intensity / (d * fadeFactor);
     }
 }

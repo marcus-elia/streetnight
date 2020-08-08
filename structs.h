@@ -41,9 +41,9 @@ struct RGBAcolor
 
 struct LightSource
 {
-    std::shared_ptr<Point> location;
-    std::shared_ptr<double> xzAngle;
-    std::shared_ptr<double> yAngle;
+    Point location;
+    double xzAngle;
+    double yAngle;
     double fieldOfView;
     int intensity;
 };
