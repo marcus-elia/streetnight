@@ -56,15 +56,10 @@ public:
 
     // Moving
     void move(double deltaX, double deltaY, double deltaZ);
-    void moveSelfAndOwner(double deltaX, double deltaY, double deltaZ);
     void rotate(double thetaX, double thetaY, double thetaZ);
     void rotateAroundPoint(const Point &ownerCenter, double thetaX, double thetaY, double thetaZ);
 
-    virtual void draw() const = 0;
-
-    // If the p is within buffer of this shape, a corrected position
-    // is returned. returns nullopt otherwise.
-    virtual std::experimental::optional<Point> correctCollision(Point p, int buffer)=0;
+    virtual void draw(double lightLevel) const = 0;
 };
 
 #endif //STREETNIGHT_SOLID_H
