@@ -1,7 +1,9 @@
 #ifndef FPS_TEMPLATE_STRUCTS_H
 #define FPS_TEMPLATE_STRUCTS_H
 
-// This file contains some structs and enums to make
+#include <memory>
+
+// This file contains some structs to make
 // including simpler
 
 
@@ -37,6 +39,12 @@ struct RGBAcolor
     double a;
 };
 
-
-
+struct LightSource
+{
+    std::shared_ptr<Point> location;
+    std::shared_ptr<double> xzAngle;
+    std::shared_ptr<double> yAngle;
+    double fieldOfView;
+    int intensity;
+};
 #endif //FPS_TEMPLATE_STRUCTS_H

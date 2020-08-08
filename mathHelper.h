@@ -28,6 +28,8 @@ double distanceFormula(double x1, double y1, double x2, double y2);
 // (calls distanceFormula())
 double distance2d(Point p1, Point p2);
 
+double distance3d(Point p1, Point p2);
+
 
 // Returns the ints corresponding to to all chunks that are within radius of this one,
 // using the taxicab metric
@@ -49,7 +51,7 @@ void rotatePointAroundPoint(Point &p, const Point &pBase, double thetaX, double 
 // that angles wrap around at 2PI
 double trueAngleDifference(double angle1, double angle2);
 bool isInFieldOfView(Point target, Point location, double xzAngle, double yAngle, double fov);
-double determineLightIntensityAt(Point target, LightSource source);
+double determineLightIntensityAt(Point target, LightSource source, double fadeFactor);
 
 
 

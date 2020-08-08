@@ -95,6 +95,13 @@ double distanceFormula(double x1, double y1, double x2, double y2)
     return sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
 }
 
+double distance3d(Point p1, Point p2)
+{
+    return sqrt((p1.x - p2.x)*(p1.x - p2.x) +
+                (p1.y - p2.y)*(p1.y - p2.y) +
+                (p1.z - p2.z)*(p1.z - p2.z));
+}
+
 std::vector<int> getChunkIDsAroundPoint(Point2D p, int radius)
 {
     std::vector<int> result;
@@ -204,4 +211,15 @@ bool isInFieldOfView(Point target, Point location, double xzAngle, double yAngle
     double angleDifY = atan2(target.y - location.y, distance2d(location, target));
     return trueAngleDifference(angleDifXZ, xzAngle) < fov && trueAngleDifference(angleDifY, yAngle) < fov;
 }
-double determineLightIntensityAt(Point target, LightSource source);
+double determineLightIntensityAt(Point target, LightSource source, double fadeFactor)
+{
+    if(!isInFieldOfView(target, *source.location, *source.xzAngle, *source.yAngle, source.fieldOfView))
+    {
+        return 0;
+    }
+    else
+    {
+        double d = distance3d(target, *source.location);
+        return source.intensity / (d * fadeFactor);
+    }
+}
