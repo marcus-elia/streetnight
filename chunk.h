@@ -8,6 +8,7 @@
 #include "graphics.h"
 #include "structs.h"
 #include "mathHelper.h"
+#include "recPrism.h"
 
 class Chunk
 {
@@ -25,12 +26,17 @@ private:
 
     RGBAcolor groundColor;
 
+    // Temporary
+    std::vector<std::shared_ptr<Solid>> shapes;
+
 public:
     Chunk();
     Chunk(Point2D inputTopLeft, int inputSideLength, RGBAcolor inputGroundColor);
 
     void initializeCenter();
     void initializeChunkID();
+    // Temporary
+    void initializeShapes();
 
     // Getters
     Point2D getTopLeft() const;
