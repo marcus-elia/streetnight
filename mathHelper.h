@@ -50,8 +50,12 @@ void rotatePointAroundPoint(Point &p, const Point &pBase, double thetaX, double 
 // Return the difference between the two angles, taking into account the fact
 // that angles wrap around at 2PI
 double trueAngleDifference(double angle1, double angle2);
+// Checks if a point is within a given field of view
 bool isInFieldOfView(Point target, Point location, double xzAngle, double yAngle, double fov);
+// Determines the light intensity based on the distance away
 double determineLightIntensityAt(Point target, LightSource source, double fadeFactor);
+// Takes into account field of view to determine light level
+double determineLightLevelAt(Point target, LightSource source, double fadeFactor);
 
 
 
