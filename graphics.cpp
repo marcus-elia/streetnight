@@ -33,7 +33,7 @@ void initGL()
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Set "clearing" or background color
-    glClearColor(0.5f, 0.7f, 1.0f, 1.0f); // Sky blue
+    glClearColor(0.0f, 0.0f, 0.01f, 1.0f); // Dark
     glEnable(GL_DEPTH_TEST);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
