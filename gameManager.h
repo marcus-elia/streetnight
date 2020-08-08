@@ -112,6 +112,7 @@ public:
 
     // Lighting
     double determineLightLevelAt(Point p) const;
+    double determineChunkLightLevel(Point p) const;
 
     // Draw
     void draw() const;

@@ -4,8 +4,8 @@ GameManager::GameManager()
 {
     screenWidth = 1024;
     screenHeight = 512;
-    chunkSize = 512;
-    renderRadius = 5;
+    chunkSize = 256;
+    renderRadius = 10;
 
     initializePlayer();
     updateCurrentChunks();
@@ -265,6 +265,10 @@ double GameManager::determineLightLevelAt(Point p) const
 {
     return fmin(1.0, determineLightIntensityAt(p, playerLight, LIGHT_FADE_FACTOR) / MAX_LIGHT_LEVEL);
 }
+double GameManager::determineChunkLightLevel(Point p) const
+{
+    return fmin(1.0, chunkSize / distance3d(player.getLocation(), p));
+}
 
 void GameManager::draw() const
 {
@@ -272,7 +276,7 @@ void GameManager::draw() const
     {
         for(std::shared_ptr<Chunk> c : currentChunks)
         {
-            c->draw(determineLightLevelAt(c->getCenter()));
+            c->draw(determineChunkLightLevel(c->getCenter()));
         }
     }
 }
