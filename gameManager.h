@@ -83,8 +83,6 @@ public:
     bool getAKey() const;
     bool getSKey() const;
     bool getDKey() const;
-    bool getRKey() const;
-    bool getCKey() const;
     bool getSpacebar() const;
     GameStatus getCurrentStatus() const;
     bool getCloseWindow() const;
@@ -111,7 +109,7 @@ public:
     void reactToMouseClick(int mx, int my);
 
     // Lighting
-    double determineLightLevelAt(Point p) const;
+    double determineOverallLightLevelAt(Point p) const;
     double determineChunkLightLevel(Point p) const;
 
     // Draw

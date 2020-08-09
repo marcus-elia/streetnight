@@ -4,8 +4,8 @@ GameManager::GameManager()
 {
     screenWidth = 1024;
     screenHeight = 512;
-    chunkSize = 256;
-    renderRadius = 10;
+    chunkSize = 128;
+    renderRadius = 16;
 
     initializePlayer();
     updateCurrentChunks();
@@ -154,16 +154,7 @@ void GameManager::updateCurrentChunks()
         if(allSeenChunks.count(index) == 0) // if the chunk has never been seen before
         {
             // Create and add a new Chunk
-            RGBAcolor newColor;
-            if((p.x + p.z) % 2 == 0)
-            {
-                newColor = CHUNK_GROUND_COLOR;
-            }
-            else
-            {
-                newColor = {0, 0.6, 0, 1};
-            }
-            allSeenChunks[index] = std::make_shared<Chunk>(p, chunkSize, newColor);
+            allSeenChunks[index] = std::make_shared<Chunk>(p, chunkSize, CHUNK_GROUND_COLOR);
         }
         currentChunks.push_back(allSeenChunks[index]);
     }
@@ -261,13 +252,14 @@ void GameManager::reactToMouseClick(int mx, int my)
 //
 // ===============================
 
-double GameManager::determineLightLevelAt(Point p) const
+double GameManager::determineOverallLightLevelAt(Point p) const
 {
-    return fmin(1.0, determineLightIntensityAt(p, playerLight, LIGHT_FADE_FACTOR) / MAX_LIGHT_LEVEL);
+    return fmin(1.0, determineLightLevelAt(p, playerLight, LIGHT_FADE_FACTOR) / MAX_LIGHT_LEVEL);
 }
 double GameManager::determineChunkLightLevel(Point p) const
 {
-    return fmin(1.0, chunkSize / distance3d(player.getLocation(), p));
+    // For now, we don't care if the chunk is in the FoV or not
+    return fmin(1.0, determineLightIntensityAt(p, playerLight, LIGHT_FADE_FACTOR));
 }
 
 void GameManager::draw() const
