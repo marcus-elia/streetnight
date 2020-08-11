@@ -69,10 +69,10 @@ private:
     double LIGHT_FADE_FACTOR = 0.001;
     double PLAYER_LIGHT_FOV = PI/4;
     int MAX_LIGHT_LEVEL = 10;
-    double LAMP_POST_HEIGHT;
-    double LAMP_POST_RADIUS;
-    RGBAcolor LAMP_POST_COLOR;
-    RGBAcolor LIGHT_COLOR;
+    double LAMP_POST_HEIGHT = 30;
+    double LAMP_POST_RADIUS = 2;
+    RGBAcolor LAMP_POST_COLOR = {0, 0.3, 0.1, 1.0};
+    RGBAcolor LIGHT_COLOR = {1.0, 1.0, 0.5, 1.0};
 public:
     GameManager();
     GameManager(int inputScreenWidth, int inputScreenHeight, int inputChunkSize, int inputRenderRadius);
