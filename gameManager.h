@@ -45,6 +45,7 @@ private:
 
     // Lighting
     LightSource playerLight;
+    std::vector<LightSource> lightSources;
     std::unordered_map<std::shared_ptr<LampPost>, bool> lampPosts; // bool determines if it is close or not
 
     // Game parameters

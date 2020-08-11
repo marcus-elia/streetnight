@@ -260,12 +260,31 @@ void GameManager::reactToMouseClick(int mx, int my)
 
 double GameManager::determineOverallLightLevelAt(Point p) const
 {
-    return fmin(1.0, determineLightLevelAt(p, playerLight, LIGHT_FADE_FACTOR) / MAX_LIGHT_LEVEL);
+    double maxSeen = 0.0;
+    for(LightSource ls : lightSources)
+    {
+        double curIntensity = determineLightLevelAt(p, ls, LIGHT_FADE_FACTOR);
+        if(curIntensity > maxSeen)
+        {
+            maxSeen = curIntensity;
+        }
+    }
+    maxSeen = fmax(maxSeen, determineLightLevelAt(p, playerLight, LIGHT_FADE_FACTOR));
+    return fmin(1.0, maxSeen / MAX_LIGHT_LEVEL);
 }
 double GameManager::determineChunkLightLevel(Point p) const
 {
-    // For now, we don't care if the chunk is in the FoV or not
-    return fmin(1.0, determineLightIntensityAt(p, playerLight, LIGHT_FADE_FACTOR));
+    double maxSeen = 0.0;
+    for(LightSource ls : lightSources)
+    {
+        double curIntensity = determineLightIntensityAt(p, ls, LIGHT_FADE_FACTOR);
+        if(curIntensity > maxSeen)
+        {
+            maxSeen = curIntensity;
+        }
+    }
+    maxSeen = fmax(maxSeen, determineLightIntensityAt(p, playerLight, LIGHT_FADE_FACTOR));
+    return fmin(1.0, maxSeen / MAX_LIGHT_LEVEL);
 }
 void GameManager::createRandomLampPost(Point chunkCenter, int chunkSize)
 {
@@ -275,6 +294,7 @@ void GameManager::createRandomLampPost(Point chunkCenter, int chunkSize)
     std::shared_ptr<LampPost> lamp = std::make_shared<LampPost>(LampPost(location, LAMP_POST_RADIUS, LAMP_POST_HEIGHT,
             LAMP_POST_RADIUS+1, LAMP_POST_RADIUS*2, LAMP_POST_COLOR, LIGHT_COLOR, MAX_LIGHT_LEVEL));
     lampPosts[lamp] = false;
+    lightSources.push_back({lamp->getLightLocation(), 0, 0, 2*PI, static_cast<int>(lamp->getLightIntensity())});
 }
 void GameManager::updateLampPostCloseness()
 {
