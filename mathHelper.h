@@ -4,6 +4,7 @@
 #include "structs.h"
 #include <cmath>
 #include <vector>
+#include <experimental/optional>
 
 // This file contains general math helper functions
 
@@ -30,6 +31,9 @@ double distance2d(Point p1, Point p2);
 
 double distance3d(Point p1, Point p2);
 
+// m and b represent a line such that z = mx + b.
+// This determines if p lies above the line in the xz plane
+bool isAboveLineXZPlane(Point p, double m, double b);
 
 // Returns the ints corresponding to to all chunks that are within radius of this one,
 // using the taxicab metric
@@ -45,6 +49,7 @@ int getChunkIDContainingPoint(Point p, int chunkSize);
 // Point operations
 void movePoint(Point &p, double deltaX, double deltaY, double deltaZ);
 void rotatePointAroundPoint(Point &p, const Point &pBase, double thetaX, double thetaY, double thetaZ);
+Point getRotatedPointAroundPoint(const Point &p, const Point &pBase, double thetaX, double thetaY, double thetaZ);
 
 // Light sources
 // Return the difference between the two angles, taking into account the fact
@@ -56,6 +61,16 @@ bool isInFieldOfView(Point target, Point location, double xzAngle, double yAngle
 double determineLightIntensityAt(Point target, LightSource source, double fadeFactor);
 // Takes into account field of view to determine light level
 double determineLightLevelAt(Point target, LightSource source, double fadeFactor);
+
+// Working in the xz-plane, assume there is a rectangle centered at c that is aligned with the x,z-axes
+// with xw and zw as its dimensions. This returns the Point with adjusted x and z  coordinates to move
+// p exactly buffer away from the rectangle.
+std::experimental::optional<Point> correctAlignedRectangularCrossSection(Point p, int buffer, Point c,
+                                                                         double xw, double zw);
+
+// Performs a rotation and calls correctAlignedRectangularCrossSection(), then unrotates
+std::experimental::optional<Point> correctRectangularCrossSection(Point p, int buffer, Point c,
+                                                                  double xw, double zw, double xzAngle);
 
 
 

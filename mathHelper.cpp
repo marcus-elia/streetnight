@@ -102,6 +102,11 @@ double distance3d(Point p1, Point p2)
                 (p1.z - p2.z)*(p1.z - p2.z));
 }
 
+bool isAboveLineXZPlane(Point p, double m, double b)
+{
+    return p.z < m*p.x + b; // Reverse inequality because up is negative z
+}
+
 std::vector<int> getChunkIDsAroundPoint(Point2D p, int radius)
 {
     std::vector<int> result;
@@ -191,6 +196,13 @@ void rotatePointAroundPoint(Point &p, const Point &pBase, double thetaX, double 
     p.z += pBase.z;
 }
 
+Point getRotatedPointAroundPoint(const Point &p, const Point &pBase, double thetaX, double thetaY, double thetaZ)
+{
+    Point result = {p.x, p.y, p.z};
+    rotatePointAroundPoint(result, pBase, thetaX, thetaY, thetaZ);
+    return result;
+}
+
 double trueAngleDifference(double angle1, double angle2)
 {
     double theta = angle1 - angle2;
@@ -230,4 +242,67 @@ double determineLightLevelAt(Point target, LightSource source, double fadeFactor
     {
         return determineLightIntensityAt(target, source, fadeFactor);
     }
+}
+
+/*
+ * + - - - - - +
+ * |  \  1  /  |
+ * | 4   X   2 |
+ * |  /  3  \  |
+ * + - - - - - +
+ */
+std::experimental::optional<Point> correctAlignedRectangularCrossSection(Point p, int buffer, Point c,
+                                                                         double xw, double zw)
+{
+    // Determine which of the 4 zones of the rectangle p lies in
+    // Let line 1 have the negative slope, and line 2 have the positive slope
+    // Line 1: z = -mx + b1
+    // Line 2: z = mx + b2
+    double m = zw / xw;
+    double b1 = c.z + m*c.x;
+    double b2 = c.z - m*c.x;
+    bool above1 = isAboveLineXZPlane(p, -m, b1);
+    bool above2 = isAboveLineXZPlane(p, m, b2);
+    if(above1 && above2) // zone 1
+    {
+        if(p.z > c.z - zw/2 - buffer)
+        {
+            return std::experimental::optional<Point>({p.x, p.y, c.z - zw/2 - buffer});
+        }
+    }
+    else if(above1) // zone 4
+    {
+        if(p.x > c.x - xw/2 - buffer)
+        {
+            return std::experimental::optional<Point>({c.x - xw/2 - buffer, p.y, p.z});
+        }
+    }
+    else if(above2) // zone 2
+    {
+        if(p.x < c.x + xw/2 + buffer)
+        {
+            return std::experimental::optional<Point>({c.x + xw/2 + buffer, p.y, p.z});
+        }
+    }
+    else // zone 3
+    {
+        if(p.z < c.z + zw/2 + buffer)
+        {
+            return std::experimental::optional<Point>({p.x, p.y, c.z + zw/2 + buffer});
+        }
+    }
+    return std::experimental::nullopt;
+}
+
+
+std::experimental::optional<Point> correctRectangularCrossSection(Point p, int buffer, Point c,
+                                                                  double xw, double zw, double xzAngle)
+{
+    Point rotatedPoint = getRotatedPointAroundPoint(p, c, 0, -xzAngle, 0);
+    std::experimental::optional<Point> correctedPoint = correctAlignedRectangularCrossSection(rotatedPoint, buffer, c, xw, zw);
+    if(correctedPoint)
+    {
+        return getRotatedPointAroundPoint(*correctedPoint, c, 0, xzAngle, 0);
+    }
+    return correctedPoint;
 }
