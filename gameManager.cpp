@@ -4,8 +4,8 @@ GameManager::GameManager()
 {
     screenWidth = 1024;
     screenHeight = 512;
-    chunkSize = 128;
-    renderRadius = 16;
+    chunkSize = 24;
+    renderRadius = 20;
 
     initializePlayer();
     updateCurrentChunks();
@@ -157,7 +157,7 @@ void GameManager::updateCurrentChunks()
             allSeenChunks[index] = std::make_shared<Chunk>(p, chunkSize, CHUNK_GROUND_COLOR);
 
             // Make a lamp post sometimes
-            if(rand() % 100 < 10)
+            if(rand() % 1000 < 4)
             {
                 createRandomLampPost(allSeenChunks[index]->getCenter(), chunkSize);
             }
@@ -292,7 +292,7 @@ void GameManager::createRandomLampPost(Point chunkCenter, int chunkSize)
     double z = chunkCenter.z + chunkSize/2 - (rand() % chunkSize);
     Point location = {x, LAMP_POST_HEIGHT/2, z};
     std::shared_ptr<LampPost> lamp = std::make_shared<LampPost>(LampPost(location, LAMP_POST_RADIUS, LAMP_POST_HEIGHT,
-            LAMP_POST_RADIUS+1, LAMP_POST_RADIUS*2, LAMP_POST_COLOR, LIGHT_COLOR, MAX_LIGHT_LEVEL));
+            LAMP_POST_RADIUS+1, LAMP_POST_RADIUS*2, LAMP_POST_COLOR, LIGHT_COLOR, MAX_LIGHT_LEVEL/2));
     lampPosts[lamp] = false;
     lightSources.push_back({lamp->getLightLocation(), 0, 0, 2*PI, static_cast<int>(lamp->getLightIntensity())});
 }
@@ -320,10 +320,7 @@ void GameManager::draw() const
 {
     if(currentStatus == Playing || currentStatus == Paused)
     {
-        for(std::shared_ptr<Chunk> c : currentChunks)
-        {
-            c->draw(determineChunkLightLevel(c->getCenter()));
-        }
+        drawChunks();
         drawLampPosts();
     }
 }
@@ -337,7 +334,17 @@ void GameManager::drawLampPosts() const
         }
     }
 }
-
+void GameManager::drawChunks() const
+{
+    for(std::shared_ptr<Chunk> c : currentChunks)
+    {
+        double lightLevel = determineChunkLightLevel(c->getCenter());
+        if(lightLevel > 0.01) // for performance, don't draw if it's too dark
+        {
+            c->draw(lightLevel);
+        }
+    }
+}
 
 
 // ================================

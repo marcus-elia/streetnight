@@ -54,7 +54,7 @@ private:
     RGBAcolor CHUNK_GROUND_COLOR = {0, 1, 0, 1};
     double PLAYER_SPEED = 2;
     double MOUSE_SENSITIVITY = 0.03;
-    int MAX_DISTANCE_FROM_SPAWN = 10240; // 10 chunks
+    int MAX_DISTANCE_FROM_SPAWN = 10240;
     double GRAVITY = -0.3;
     double PLAYER_JUMP_AMOUNT = 4;
     int BUTTON_WIDTH = 128;
@@ -124,6 +124,7 @@ public:
     // Draw
     void draw() const;
     void drawLampPosts() const;
+    void drawChunks() const;
 
     // Tick helper functions
     void tick();
