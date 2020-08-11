@@ -34,7 +34,9 @@ void Train::initializeVelocity()
 }
 void Train::initializeSolids()
 {
-    solids.push_back(std::make_shared<RecPrism>(RecPrism(location, color, xWidth, yWidth, zWidth, {1,1,1,1})));
+    std::shared_ptr<RecPrism> body = std::make_shared<RecPrism>(RecPrism(location, color, xWidth, yWidth, zWidth, {1,1,1,1}));
+    body->rotate(0, xzAngle - 3*PI/2, 0);
+    solids.push_back(body);
 }
 
 // Getters

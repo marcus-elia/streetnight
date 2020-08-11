@@ -6,12 +6,14 @@ GameManager::GameManager()
     screenHeight = 512;
     chunkSize = 24;
     renderRadius = 20;
+    viewDistance = renderRadius*chunkSize;
 
     initializePlayer();
     updateCurrentChunks();
     initializeButtons();
     makeInstructions();
     initializePlayerLight();
+    makeTrain();
 }
 GameManager::GameManager(int inputScreenWidth, int inputScreenHeight, int inputChunkSize, int inputRenderRadius)
 {
@@ -19,12 +21,14 @@ GameManager::GameManager(int inputScreenWidth, int inputScreenHeight, int inputC
     screenHeight = inputScreenHeight;
     chunkSize = inputChunkSize;
     renderRadius = inputRenderRadius;
+    viewDistance = renderRadius*chunkSize;
 
     initializePlayer();
     updateCurrentChunks();
     initializeButtons();
     makeInstructions();
     initializePlayerLight();
+    makeTrain();
 }
 
 // =================================
@@ -166,7 +170,22 @@ void GameManager::updateCurrentChunks()
     }
 }
 
-// Camera
+void GameManager::makeTrain()
+{
+    double randAngle = (rand() % 100)*2*PI / 100;
+    double x = player.getLocation().x + cos(randAngle)*viewDistance;
+    double y = TRAIN_HEIGHT/2;
+    double z = player.getLocation().z + sin(randAngle)*viewDistance;
+    double trainAngle = atan2(player.getLocation().z - z, player.getLocation().x - x);
+    train = Train({x,y,z}, TRAIN_COLOR, TRAIN_WIDTH, TRAIN_HEIGHT, TRAIN_LENGTH, TRAIN_SPEED, trainAngle);
+}
+
+
+// =================================
+//
+//             Camera
+//
+// =================================
 Point GameManager::getCameraLocation() const
 {
     return player.getLocation();
@@ -322,6 +341,7 @@ void GameManager::draw() const
     {
         drawChunks();
         drawLampPosts();
+        drawTrain();
     }
 }
 void GameManager::drawLampPosts() const
@@ -345,6 +365,11 @@ void GameManager::drawChunks() const
         }
     }
 }
+void GameManager::drawTrain() const
+{
+    double lightLevel = determineOverallLightLevelAt(train.getLocation());
+    train.draw(lightLevel);
+}
 
 
 // ================================
@@ -358,6 +383,7 @@ void GameManager::tick()
     {
         playerTick();
         updateLampPostCloseness();
+        trainTick();
     }
 }
 void GameManager::playerTick()
@@ -379,6 +405,14 @@ void GameManager::playerTick()
     playerLight.location = player.getLocation();
     playerLight.xzAngle = player.getXZAngle();
     playerLight.yAngle = player.getYAngle();
+}
+void GameManager::trainTick()
+{
+    train.tick();
+    if(distance2d(train.getLocation(), player.getLocation()) > 1.5*viewDistance)
+    {
+        makeTrain();
+    }
 }
 
 // Game Management
