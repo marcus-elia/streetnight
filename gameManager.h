@@ -10,6 +10,7 @@
 #include "chunk.h"
 #include "mathHelper.h"
 #include "button.h"
+#include "lampPost.h"
 
 enum GameStatus {Intro, Playing, End, Paused};
 
@@ -44,6 +45,7 @@ private:
 
     // Lighting
     LightSource playerLight;
+    std::unordered_map<std::shared_ptr<LampPost>, bool> lampPosts; // bool determines if it is close or not
 
     // Game parameters
     double PLAYER_HEIGHT = 20;
@@ -67,6 +69,10 @@ private:
     double LIGHT_FADE_FACTOR = 0.001;
     double PLAYER_LIGHT_FOV = PI/4;
     int MAX_LIGHT_LEVEL = 10;
+    double LAMP_POST_HEIGHT;
+    double LAMP_POST_RADIUS;
+    RGBAcolor LAMP_POST_COLOR;
+    RGBAcolor LIGHT_COLOR;
 public:
     GameManager();
     GameManager(int inputScreenWidth, int inputScreenHeight, int inputChunkSize, int inputRenderRadius);
@@ -111,9 +117,12 @@ public:
     // Lighting
     double determineOverallLightLevelAt(Point p) const;
     double determineChunkLightLevel(Point p) const;
+    void createRandomLampPost(Point chunkCenter, int chunkSize);
+    void updateLampPostCloseness();
 
     // Draw
     void draw() const;
+    void drawLampPosts() const;
 
     // Tick helper functions
     void tick();

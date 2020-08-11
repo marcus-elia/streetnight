@@ -155,6 +155,12 @@ void GameManager::updateCurrentChunks()
         {
             // Create and add a new Chunk
             allSeenChunks[index] = std::make_shared<Chunk>(p, chunkSize, CHUNK_GROUND_COLOR);
+
+            // Make a lamp post sometimes
+            if(rand() % 100 < 10)
+            {
+                createRandomLampPost(allSeenChunks[index]->getCenter(), chunkSize);
+            }
         }
         currentChunks.push_back(allSeenChunks[index]);
     }
@@ -261,7 +267,35 @@ double GameManager::determineChunkLightLevel(Point p) const
     // For now, we don't care if the chunk is in the FoV or not
     return fmin(1.0, determineLightIntensityAt(p, playerLight, LIGHT_FADE_FACTOR));
 }
+void GameManager::createRandomLampPost(Point chunkCenter, int chunkSize)
+{
+    double x = chunkCenter.x + chunkSize/2 - (rand() % chunkSize);
+    double z = chunkCenter.z + chunkSize/2 - (rand() % chunkSize);
+    Point location = {x, LAMP_POST_HEIGHT/2, z};
+    std::shared_ptr<LampPost> lamp = std::make_shared<LampPost>(LampPost(location, LAMP_POST_RADIUS, LAMP_POST_HEIGHT,
+            LAMP_POST_RADIUS-1, LAMP_POST_RADIUS*2, LAMP_POST_COLOR, LIGHT_COLOR, MAX_LIGHT_LEVEL));
+    lampPosts[lamp] = false;
+}
+void GameManager::updateLampPostCloseness()
+{
+    for(std::pair<std::shared_ptr<LampPost>, bool> element : lampPosts)
+    {
+        if(distance2d(element.first->getLocation(), player.getLocation()) < renderRadius*chunkSize)
+        {
+            lampPosts[element.first] = true;
+        }
+        else
+        {
+            lampPosts[element.first] = false;
+        }
+    }
+}
 
+// ================================
+//
+//              Draw
+//
+// ================================
 void GameManager::draw() const
 {
     if(currentStatus == Playing || currentStatus == Paused)
@@ -270,15 +304,33 @@ void GameManager::draw() const
         {
             c->draw(determineChunkLightLevel(c->getCenter()));
         }
+        drawLampPosts();
+    }
+}
+void GameManager::drawLampPosts() const
+{
+    for(std::pair<std::shared_ptr<LampPost>, bool> element : lampPosts)
+    {
+        if(element.second)
+        {
+            element.first->draw(element.first->getLightIntensity());
+        }
     }
 }
 
-// Tick helper functions
+
+
+// ================================
+//
+//              Tick
+//
+// ================================
 void GameManager::tick()
 {
     if(currentStatus == Playing)
     {
         playerTick();
+        updateLampPostCloseness();
     }
 }
 void GameManager::playerTick()
