@@ -189,6 +189,13 @@ void Player::stayWithinBoundary()
     }
 }
 
+void Player::moveToCorrectedLocation(Point newLocation)
+{
+    lookingAt.x += newLocation.x - location.x;
+    lookingAt.y += newLocation.y - location.y;
+    lookingAt.z += newLocation.z - location.z;
+    location = newLocation;
+}
 
 // Based on which keys are pressed, set the velocity
 void Player::setVelocity(bool wKey, bool aKey, bool sKey, bool dKey)

@@ -170,6 +170,11 @@ void GameManager::updateCurrentChunks()
     }
 }
 
+// =================================
+//
+//             Trains
+//
+// =================================
 void GameManager::makeTrain()
 {
     double randAngle = player.getXZAngle() + (rand() % 100)*PI/4 / 100 - (rand() % 100)*PI/2 / 100;
@@ -180,6 +185,19 @@ void GameManager::makeTrain()
     train = Train({x,y,z}, TRAIN_COLOR, TRAIN_WIDTH, TRAIN_HEIGHT, TRAIN_LENGTH, TRAIN_SPEED, trainAngle);
 }
 
+// =================================
+//
+//             Player
+//
+// =================================
+void GameManager::correctPlayerCollisions()
+{
+    std::experimental::optional<Point> correctedPoint = train.correctCollision(player.getLocation(), 2*PLAYER_RADIUS);
+    if(correctedPoint)
+    {
+        player.moveToCorrectedLocation(*correctedPoint);
+    }
+}
 
 // =================================
 //
@@ -381,9 +399,9 @@ void GameManager::tick()
 {
     if(currentStatus == Playing)
     {
-        playerTick();
         updateLampPostCloseness();
         trainTick();
+        playerTick();
     }
 }
 void GameManager::playerTick()
@@ -393,6 +411,8 @@ void GameManager::playerTick()
     {
         player.tryToJump();
     }
+
+    correctPlayerCollisions();
 
     // Check if the player has entered a new chunk
     int newPlayerChunkID = getChunkIDContainingPoint(player.getLocation(), chunkSize);

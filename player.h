@@ -70,11 +70,12 @@ public:
 
     // Keep the Player from going through the ground
     void correctGround();
-
     void applyGravity();
-
     // Don't allow the Player to move past maxDistanceFromSpawn
     void stayWithinBoundary();
+
+    // Move the player due to an external force
+    void moveToCorrectedLocation(Point newLocation);
 
     // Based on which keys are pressed, set the velocity
     void setVelocity(bool wKey, bool aKey, bool sKey, bool dKey);

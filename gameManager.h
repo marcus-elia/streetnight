@@ -116,6 +116,9 @@ public:
     // Chunks
     void updateCurrentChunks();
 
+    // Player
+    void correctPlayerCollisions();
+
     // Trains
     void makeTrain();
 
