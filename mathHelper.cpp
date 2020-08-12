@@ -306,3 +306,57 @@ std::experimental::optional<Point> correctRectangularCrossSection(Point p, int b
     }
     return correctedPoint;
 }
+
+std::experimental::optional<Point> correctAlignedRectangularPrism(Point p, int buffer, Point c,
+                                                                         double xw, double yw, double zw)
+{
+    double distanceOutsideLeftEdge = c.x - xw/2 - p.x;
+    double distanceOutsideRightEdge = p.x - c.x - xw/2;
+    double distanceAboveTopEdge = p.y - c.y - yw/2;
+    double distanceBelowBottomEdge = c.y - yw/2 - p.y;
+    double distanceOutsideFrontEdge = p.z - c.z - zw/2;
+    double distanceOutsideBackEdge = c.z - zw/2 - p.z;
+    // If the point is closest to the top face
+    if(distanceAboveTopEdge > distanceOutsideLeftEdge && distanceAboveTopEdge > distanceOutsideRightEdge &&
+       distanceAboveTopEdge > distanceOutsideFrontEdge && distanceAboveTopEdge > distanceOutsideBackEdge)
+    {
+        if(distanceAboveTopEdge >= buffer)
+        {
+            return std::experimental::nullopt;
+        }
+        else
+        {
+            return std::experimental::optional<Point>({p.x, c.y + yw/2 + buffer, p.z});
+        }
+    }
+        // If the point is closest to the bottom face
+    else if(distanceBelowBottomEdge > distanceOutsideLeftEdge && distanceBelowBottomEdge > distanceOutsideRightEdge &&
+            distanceBelowBottomEdge > distanceOutsideFrontEdge && distanceBelowBottomEdge > distanceOutsideBackEdge)
+    {
+        if(distanceBelowBottomEdge >= buffer)
+        {
+            return std::experimental::nullopt;
+        }
+        else
+        {
+            return std::experimental::optional<Point>({p.x, c.y - yw/2 - buffer, p.z});
+        }
+    }
+        // Otherwise, assume it is near a side face and correct that
+    else
+    {
+        return correctAlignedRectangularCrossSection(p, buffer, c, xw, zw);
+    }
+}
+
+std::experimental::optional<Point> correctRectangularPrism(Point p, int buffer, Point c,
+                                                           double xw, double yw, double zw, double xzAngle)
+{
+    Point rotatedPoint = getRotatedPointAroundPoint(p, c, 0, -xzAngle, 0);
+    std::experimental::optional<Point> correctedPoint = correctAlignedRectangularPrism(rotatedPoint, buffer, c, xw, yw, zw);
+    if(correctedPoint)
+    {
+        return getRotatedPointAroundPoint(*correctedPoint, c, 0, xzAngle, 0);
+    }
+    return correctedPoint;
+}

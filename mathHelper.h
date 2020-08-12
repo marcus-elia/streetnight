@@ -72,6 +72,12 @@ std::experimental::optional<Point> correctAlignedRectangularCrossSection(Point p
 std::experimental::optional<Point> correctRectangularCrossSection(Point p, int buffer, Point c,
                                                                   double xw, double zw, double xzAngle);
 
+// This assumes x, y, and z are all aligned.
+std::experimental::optional<Point> correctAlignedRectangularPrism(Point p, int buffer, Point c,
+                                                                         double xw, double yw, double zw);
 
+// This assumes the y-axis is aligned. If there was a y-rotation, this does not work.
+std::experimental::optional<Point> correctRectangularPrism(Point p, int buffer, Point c,
+                                                                  double xw, double yw, double zw, double xzAngle);
 
 #endif //FPS_TEMPLATE_MATHHELPER_H
