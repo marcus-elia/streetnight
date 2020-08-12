@@ -172,7 +172,7 @@ void GameManager::updateCurrentChunks()
 
 void GameManager::makeTrain()
 {
-    double randAngle = (rand() % 100)*2*PI / 100;
+    double randAngle = player.getXZAngle() + (rand() % 100)*PI/4 / 100 - (rand() % 100)*PI/2 / 100;
     double x = player.getLocation().x + cos(randAngle)*viewDistance;
     double y = TRAIN_HEIGHT/2;
     double z = player.getLocation().z + sin(randAngle)*viewDistance;
