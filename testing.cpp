@@ -782,6 +782,11 @@ std::string testCorrectRectangularCrossSection()
     points.push_back({11.313708498984761, 0, -2.8284271247461903});
     exp.push_back(std::experimental::optional<Point>({12.020815280171309, 0, -2.121320343559643}));
 
+    cases.push_back("Would have been out, but in due to 90 deg angle");
+    angles.push_back(PI/2);
+    points.push_back({10, 0, 6});
+    exp.push_back(std::experimental::optional<Point>({10, 0, 7}));
+
     for(int i = 0; i < cases.size(); i++)
     {
         std::experimental::optional<Point> obs = correctRectangularCrossSection(points[i], buffer, c, xw, zw, angles[i]);
