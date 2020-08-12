@@ -11,6 +11,7 @@ Train::Train()
     xzAngle = 3*PI/2;
     initializeVelocity();
     initializeSolids();
+    initializeHitbox();
 }
 Train::Train(Point inputLocation, RGBAcolor inputColor, double inputXWidth, double inputYWidth, double inputZWidth,
 double inputSpeed, double inputXZAngle)
@@ -24,6 +25,7 @@ double inputSpeed, double inputXZAngle)
     xzAngle = inputXZAngle;
     initializeVelocity();
     initializeSolids();
+    initializeHitbox();
 }
 
 void Train::initializeVelocity()
@@ -37,6 +39,11 @@ void Train::initializeSolids()
     std::shared_ptr<RecPrism> body = std::make_shared<RecPrism>(RecPrism(location, color, xWidth, yWidth, zWidth, {1,1,1,1}));
     body->rotate(0, xzAngle - 3*PI/2, 0);
     solids.push_back(body);
+}
+void Train::initializeHitbox()
+{
+    hitbox = RecPrism(location, color, xWidth, yWidth, zWidth, {1,1,1,1});
+    hitbox.rotate(0, xzAngle - 3*PI/2, 0);
 }
 
 // Getters
@@ -69,4 +76,10 @@ void Train::move()
     {
         s->move(velocity.x, velocity.y, velocity.z);
     }
+    hitbox.move(velocity.x, velocity.y, velocity.z);
+}
+
+std::experimental::optional<Point> Train::correctCollision(Point p, double buffer) const
+{
+    return correctRectangularPrism(p, buffer, hitbox.getCenter(), hitbox.getXWidth(), hitbox.getYWidth(), hitbox.getZWidth(), xzAngle);
 }

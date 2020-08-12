@@ -2,6 +2,7 @@
 #define STREETNIGHT_TRAIN_H
 
 #include "recPrism.h"
+#include "mathHelper.h"
 #include <vector>
 #include <memory>
 
@@ -15,6 +16,7 @@ private:
     Point velocity;
     double xzAngle;
     std::vector<std::shared_ptr<Solid>> solids;
+    RecPrism hitbox;
 public:
     Train();
     Train(Point inputLocation, RGBAcolor inputColor, double inputXWidth, double inputYWidth, double inputZWidth,
@@ -22,6 +24,7 @@ public:
 
     void initializeVelocity();
     void initializeSolids();
+    void initializeHitbox();
 
     // Getters
     Point getLocation() const;
@@ -30,6 +33,8 @@ public:
     void draw(double lightLevel) const;
     void tick();
     void move();
+
+    std::experimental::optional<Point> correctCollision(Point p, double buffer) const;
 };
 
 #endif //STREETNIGHT_TRAIN_H
