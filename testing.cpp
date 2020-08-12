@@ -15,6 +15,8 @@ std::string testGetChunkTopLeftCornersAroundPoint();
 std::string testGetChunkIDContainingPoint();
 std::string testTrueAngleDifference();
 std::string testIsInFieldOfView();
+std::string testCorrectAlignedRectangularCrossSection();
+std::string testCorrectRectangularCrossSection();
 
 int main()
 {
@@ -30,6 +32,8 @@ int main()
     results += testGetChunkIDContainingPoint();
     results += testTrueAngleDifference();
     results += testIsInFieldOfView();
+    results += testCorrectAlignedRectangularCrossSection();
+    results += testCorrectRectangularCrossSection();
     std::cout << "\n" << results << std::endl;
     return 0;
 }
@@ -620,5 +624,191 @@ std::string testIsInFieldOfView()
         results += ".";
     }
 
+    return results;
+}
+
+std::string testCorrectAlignedRectangularCrossSection()
+{
+    std::cout << "\nTesting correctAlignedRectangularCrossSection()" << std::endl;
+    std::string results = "";
+
+    const double TOLERANCE = 0.01;
+    Point c;
+    double xw, zw;
+    int buffer;
+
+    std::vector<std::string> cases;
+    std::vector<Point> inputs;
+    std::vector<std::experimental::optional<Point>> exp;
+    std::vector<std::experimental::optional<Point>> obs;
+
+    // Fixed parameters
+    c = {0, 0, 0};
+    xw = 10;
+    zw = 20;
+    buffer = 2;
+
+    // When the Point does not need to be corrected
+    cases.push_back("Way too far left");
+    inputs.push_back({-30, 0, 0});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("On the left buffer");
+    inputs.push_back({-7, 0, 0});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("Way too far right");
+    inputs.push_back({30, 0, 0});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("On the right buffer");
+    inputs.push_back({7, 0, 0});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("Way too far up");
+    inputs.push_back({0, 0, -30});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("On the top buffer");
+    inputs.push_back({0, 0, -12});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("Way too far down");
+    inputs.push_back({0, 0, 30});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("On the bottom buffer");
+    inputs.push_back({0, 0, 12});
+    exp.push_back(std::experimental::nullopt);
+
+    // When the Point does need to be corrected
+    cases.push_back("Inside zone 1");
+    inputs.push_back({0, 0, -2});
+    exp.push_back(std::experimental::optional<Point>({0, 0, -12}));
+    cases.push_back("Inside zone 2");
+    inputs.push_back({2, 0, 0});
+    exp.push_back(std::experimental::optional<Point>({7, 0, 0}));
+    cases.push_back("Inside zone 3");
+    inputs.push_back({0, 0, 2});
+    exp.push_back(std::experimental::optional<Point>({0, 0, 12}));
+    cases.push_back("Inside zone 4");
+    inputs.push_back({-2, 0, 0});
+    exp.push_back(std::experimental::optional<Point>({-7, 0, 0}));
+
+    // Diagonal points outside
+    cases.push_back("Point slightly N of NW and outside");
+    inputs.push_back({-7, 0, -13});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("Point slightly W of NW and outside");
+    inputs.push_back({-8, 0, -12});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("Point slightly N of NE and outside");
+    inputs.push_back({7, 0, -13});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("Point slightly E of NE and outside");
+    inputs.push_back({8, 0, -12});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("Point slightly S of SE and outside");
+    inputs.push_back({7, 0, 13});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("Point slightly E of SE and outside");
+    inputs.push_back({8, 0, 12});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("Point slightly S of SW and outside");
+    inputs.push_back({-7, 0, 13});
+    exp.push_back(std::experimental::nullopt);
+    cases.push_back("Point slightly W of SW and outside");
+    inputs.push_back({-8, 0, 12});
+    exp.push_back(std::experimental::nullopt);
+
+    // Diagonal points inside
+    cases.push_back(" Point slightly N of NW and inside buffer");
+    inputs.push_back({-5.2, 0, -10.5});
+    exp.push_back(std::experimental::optional<Point>({-5.2, 0, -12}));
+
+    for(int i = 0; i < cases.size(); i++)
+    {
+        std::experimental::optional<Point> obs = correctAlignedRectangularCrossSection(inputs[i], buffer, c, xw, zw);
+        if(exp[i])
+        {
+            if(!obs || distance2d(*exp[i], *obs) > TOLERANCE)
+            {
+                std::cout << "Test FAILED for " + cases[i] << std::endl;
+                results += "F";
+            }
+            else
+            {
+                results += ".";
+            }
+        }
+        else
+        {
+            if(obs)
+            {
+                std::cout << "Test FAILED for " + cases[i] << std::endl;
+                results += "F";
+            }
+            else
+            {
+                results += ".";
+            }
+        }
+    }
+    return results;
+}
+
+std::string testCorrectRectangularCrossSection()
+{
+    std::cout << "\nTesting correctRectangularCrossSection()" << std::endl;
+    std::string results = "";
+
+    const double TOLERANCE = 0.01;
+    Point c;
+    double xw, zw;
+    int buffer;
+
+    std::vector<std::string> cases;
+    std::vector<Point> points;
+    std::vector<double> angles;
+    std::vector<std::experimental::optional<Point>> exp;
+    std::vector<std::experimental::optional<Point>> obs;
+
+    // Fixed parameters
+    c = {0, 0, 0};
+    xw = 10;
+    zw = 20;
+    buffer = 2;
+
+    cases.push_back("Would have been in, but out due to 45 deg angle");
+    angles.push_back(PI/4);
+    points.push_back({6, 0, 11});
+    exp.push_back(std::experimental::nullopt);
+
+    cases.push_back("Would have been out, but in due to 45 deg angle");
+    angles.push_back(PI/4);
+    points.push_back({11.313708498984761, 0, -2.8284271247461903});
+    exp.push_back(std::experimental::optional<Point>({12.020815280171309, 0, -2.121320343559643}));
+
+    for(int i = 0; i < cases.size(); i++)
+    {
+        std::experimental::optional<Point> obs = correctRectangularCrossSection(points[i], buffer, c, xw, zw, angles[i]);
+        if(exp[i])
+        {
+            if(!obs || distance2d(*exp[i], *obs) > TOLERANCE)
+            {
+                std::cout << "Test FAILED for " + cases[i] << std::endl;
+                results += "F";
+            }
+            else
+            {
+                results += ".";
+            }
+        }
+        else
+        {
+            if(obs)
+            {
+                std::cout << "Test FAILED for " + cases[i] << std::endl;
+                results += "F";
+            }
+            else
+            {
+                results += ".";
+            }
+        }
+    }
     return results;
 }
