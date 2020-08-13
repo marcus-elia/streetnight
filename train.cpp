@@ -42,7 +42,7 @@ void Train::initializeSolids()
 }
 void Train::initializeHitbox()
 {
-    hitbox = RecPrism(location, color, xWidth, yWidth, zWidth, {1,1,1,1});
+    hitbox = RecPrism(location, {1,0.9,0.9,0.5}, xWidth, yWidth, zWidth, {1,1,1,1});
     hitbox.rotate(0, xzAngle - 3*PI/2, 0);
 }
 
@@ -81,5 +81,5 @@ void Train::move()
 
 std::experimental::optional<Point> Train::correctCollision(Point p, double buffer) const
 {
-    return correctRectangularPrism(p, buffer, hitbox.getCenter(), hitbox.getXWidth(), hitbox.getYWidth(), hitbox.getZWidth(), xzAngle);
+    return correctRectangularPrism(p, buffer, hitbox.getCenter(), hitbox.getXWidth(), hitbox.getYWidth(), hitbox.getZWidth(), hitbox.getXZAngle());
 }
