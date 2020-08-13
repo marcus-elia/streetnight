@@ -45,7 +45,7 @@ void GameManager::initializePlayer()
     player = Player(playerStartLoc, playerStartLook, playerStartUp, PLAYER_SPEED, MOUSE_SENSITIVITY,
                     PLAYER_HEIGHT, PLAYER_RADIUS, MAX_DISTANCE_FROM_SPAWN, GRAVITY, PLAYER_JUMP_AMOUNT);
     currentPlayerChunkID = getChunkIDContainingPoint(player.getLocation(), chunkSize);
-    playerHealth = 100;
+    playerHealth = MAX_PLAYER_HEALTH;
 }
 
 void GameManager::initializeButtons()
@@ -488,6 +488,7 @@ void GameManager::drawUI() const
     else if(currentStatus == Playing)
     {
         drawCursor();
+        drawHealthBar();
     }
     else if(currentStatus == Paused)
     {
@@ -529,4 +530,24 @@ void GameManager::displayInstructions() const
             glutBitmapCharacter(GLUT_BITMAP_9_BY_15, letter);
         }
     }
+}
+
+void GameManager::drawHealthBar() const
+{
+    double dividingPoint = HEALTH_BAR_LENGTH * playerHealth / MAX_PLAYER_HEALTH;
+    setGLColor(HEALTH_BAR_HEALTH);
+    glBegin(GL_QUADS);
+    glVertex2f(0, screenHeight);
+    glVertex2f(0, screenHeight - HEALTH_BAR_HEIGHT);
+    glVertex2f(dividingPoint, screenHeight - HEALTH_BAR_HEIGHT);
+    glVertex2f(dividingPoint, screenHeight);
+    glEnd();
+
+    setGLColor(HEALTH_BAR_VOID);
+    glBegin(GL_QUADS);
+    glVertex2f(dividingPoint, screenHeight);
+    glVertex2f(dividingPoint, screenHeight - HEALTH_BAR_HEIGHT);
+    glVertex2f(HEALTH_BAR_LENGTH, screenHeight - HEALTH_BAR_HEIGHT);
+    glVertex2f(HEALTH_BAR_LENGTH, screenHeight);
+    glEnd();
 }

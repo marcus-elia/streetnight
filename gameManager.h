@@ -86,6 +86,11 @@ private:
     double TRAIN_LENGTH = 60;
     RGBAcolor TRAIN_COLOR = {0.0, 0.0, 0.2, 1.0};
     int TRAIN_DAMAGE_PER_TICK = 1;
+    int MAX_PLAYER_HEALTH = 100;
+    int HEALTH_BAR_HEIGHT = 30;
+    int HEALTH_BAR_LENGTH = 256;
+    RGBAcolor HEALTH_BAR_HEALTH = {0.0, 0.6, 1.0, 1.0};
+    RGBAcolor HEALTH_BAR_VOID = {1.0, 0.0, 0.2, 1.0};
 public:
     GameManager();
     GameManager(int inputScreenWidth, int inputScreenHeight, int inputChunkSize, int inputRenderRadius);
@@ -159,6 +164,7 @@ public:
     void drawUI() const;
     void drawCursor() const;
     void displayInstructions() const;
+    void drawHealthBar() const;
 };
 
 #endif //FPS_TEMPLATE_GAMEMANAGER_H
