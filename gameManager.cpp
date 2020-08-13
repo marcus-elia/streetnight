@@ -45,6 +45,7 @@ void GameManager::initializePlayer()
     player = Player(playerStartLoc, playerStartLook, playerStartUp, PLAYER_SPEED, MOUSE_SENSITIVITY,
                     PLAYER_HEIGHT, PLAYER_RADIUS, MAX_DISTANCE_FROM_SPAWN, GRAVITY, PLAYER_JUMP_AMOUNT);
     currentPlayerChunkID = getChunkIDContainingPoint(player.getLocation(), chunkSize);
+    playerHealth = 100;
 }
 
 void GameManager::initializeButtons()
@@ -196,6 +197,7 @@ void GameManager::correctPlayerCollisions()
     if(correctedPoint)
     {
         player.moveToCorrectedLocation(*correctedPoint);
+        playerHealth -= TRAIN_DAMAGE_PER_TICK;
     }
 }
 
@@ -217,7 +219,11 @@ Point GameManager::getCameraUp() const
     return player.getUp();
 }
 
-// Mouse
+// =================================
+//
+//             Mouse
+//
+// =================================
 void GameManager::reactToMouseMovement(int mx, int my, double theta)
 {
     if(currentStatus == Intro)
@@ -402,6 +408,7 @@ void GameManager::tick()
         updateLampPostCloseness();
         trainTick();
         playerTick();
+        checkForGameEnd();
     }
 }
 void GameManager::playerTick()
@@ -435,10 +442,24 @@ void GameManager::trainTick()
     }
 }
 
-// Game Management
+// ===========================================
+//
+//             Game Management
+//
+// ===========================================
+void GameManager::checkForGameEnd()
+{
+    if(playerHealth < 1)
+    {
+        currentStatus = End;
+        showMouse = true;
+    }
+}
 void GameManager::resetGame()
 {
     initializePlayer();
+    updateCurrentChunks();
+    makeTrain();
     currentStatus = Playing;
 }
 void GameManager::togglePaused()

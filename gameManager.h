@@ -19,6 +19,7 @@ class GameManager
 {
 private:
     Player player;
+    int playerHealth;
 
     // Controls
     bool wKey, aKey, sKey, dKey, spacebar;
@@ -84,6 +85,7 @@ private:
     double TRAIN_HEIGHT = 30;
     double TRAIN_LENGTH = 60;
     RGBAcolor TRAIN_COLOR = {0.0, 0.0, 0.2, 1.0};
+    int TRAIN_DAMAGE_PER_TICK = 1;
 public:
     GameManager();
     GameManager(int inputScreenWidth, int inputScreenHeight, int inputChunkSize, int inputRenderRadius);
