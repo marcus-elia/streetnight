@@ -2,9 +2,11 @@
 
 Solid::Solid()
 {
+    center = {0, 0, 0};
     xWidth = 1;
     yWidth = 1;
     zWidth = 1;
+    xzAngle = 0;
     lineColor = {1,1,1,1};
     linesDrawn = Normal;
     initializeCorners();
@@ -21,6 +23,7 @@ Solid::Solid(Point inputCenter, RGBAcolor inputColor,
     zWidth = inputZWidth;
     lineColor = inputLineColor;
     linesDrawn = inputLinesDrawn;
+    xzAngle = 0;
     initializeCorners();
 }
 
@@ -57,6 +60,10 @@ RGBAcolor Solid::getLineColor() const
 {
     return lineColor;
 }
+double Solid::getXZAngle() const
+{
+    return xzAngle;
+}
 
 
 void Solid::setCenter(Point inputCenter)
@@ -87,6 +94,21 @@ void Solid::setLineColor(RGBAcolor inputLineColor)
 {
     lineColor = inputLineColor;
 }
+void Solid::setXZAngle(double inputAngle)
+{
+    if(inputAngle > 2*PI)
+    {
+        xzAngle = inputAngle - 2*PI;
+    }
+    else if(inputAngle < 0)
+    {
+        xzAngle = inputAngle + 2*PI;
+    }
+    else
+    {
+        xzAngle = inputAngle;
+    }
+}
 
 
 
@@ -106,6 +128,7 @@ void Solid::rotate(double thetaX, double thetaY, double thetaZ)
     {
         rotatePointAroundPoint(p, center, thetaX, thetaY, thetaZ);
     }
+    setXZAngle(xzAngle + thetaY);
 }
 
 void Solid::rotateAroundPoint(const Point &ownerCenter, double thetaX, double thetaY, double thetaZ)
@@ -115,4 +138,5 @@ void Solid::rotateAroundPoint(const Point &ownerCenter, double thetaX, double th
     {
         rotatePointAroundPoint(p, ownerCenter, thetaX, thetaY, thetaZ);
     }
+    setXZAngle(xzAngle + thetaY);
 }

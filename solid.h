@@ -15,6 +15,7 @@ class Solid
 {
 protected:
     Point center;
+    double xzAngle;
     RGBAcolor color;
     std::vector<Point> corners;
     double xWidth;
@@ -42,6 +43,7 @@ public:
     double getXWidth() const;
     double getYWidth() const;
     double getZWidth() const;
+    double getXZAngle() const;
     RGBAcolor getLineColor() const;
 
     // Setter
@@ -52,6 +54,7 @@ public:
     void setYWidth(double inputYWidth);
     void setZWidth(double inputZWidth);
     void setLineColor(RGBAcolor inputLineColor);
+    void setXZAngle(double inputAngle); // doesn't rotate the corners, just sets the angle
 
 
     // Moving
