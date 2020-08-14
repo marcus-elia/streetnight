@@ -25,7 +25,7 @@ Coin::Coin(Point inputLocation, double inputRadius, double inputThickness, doubl
 void Coin::initializeSolids()
 {
     std::shared_ptr<RecPrism> coinShape = std::make_shared<RecPrism>(RecPrism(location, color, 2*radius, thickness, 2*radius, {1,1,1,1}));
-    coinShape->rotate(0, -PI/2, 0);
+    coinShape->rotate(-PI/2, 0, 0);
     solids.push_back(coinShape);
 }
 void Coin::initializeHitbox()
