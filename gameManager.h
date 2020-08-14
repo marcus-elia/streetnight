@@ -12,6 +12,7 @@
 #include "button.h"
 #include "lampPost.h"
 #include "train.h"
+#include "coin.h"
 
 enum GameStatus {Intro, Playing, End, Paused};
 
@@ -34,8 +35,11 @@ private:
     // Trains
     Train train;
 
+    // Coins
+    std::vector<std::shared_ptr<Coin>> coins;
+
     GameStatus currentStatus;
-    double viewDistance;
+    int viewDistance;
 
     // UI
     int screenWidth, screenHeight;
@@ -91,6 +95,12 @@ private:
     int HEALTH_BAR_LENGTH = 256;
     RGBAcolor HEALTH_BAR_HEALTH = {0.0, 0.6, 1.0, 1.0};
     RGBAcolor HEALTH_BAR_VOID = {1.0, 0.0, 0.2, 1.0};
+    double COIN_RADIUS = 5;
+    double COIN_FLOAT_HEIGHT = 7;
+    double COIN_THICKNESS = 1.5;
+    double COIN_ROTATION_SPEED = 0.01;
+    RGBAcolor COIN_COLOR = {1.0, 0.8, 0.1, 1.0};
+    int MAX_NUM_COINS = 5;
 public:
     GameManager();
     GameManager(int inputScreenWidth, int inputScreenHeight, int inputChunkSize, int inputRenderRadius);
@@ -129,6 +139,10 @@ public:
     // Trains
     void makeTrain();
 
+    // Coins
+    void spawnRandomlyLocatedCoin();
+    void checkCoins();
+
     // Camera
     Point getCameraLocation() const;
     Point getCameraLookingAt() const;
@@ -149,11 +163,13 @@ public:
     void drawLampPosts() const;
     void drawChunks() const;
     void drawTrain() const;
+    void drawCoins() const;
 
     // Tick helper functions
     void tick();
     void playerTick();
     void trainTick();
+    void coinsTick();
 
     // Game Management
     void checkForGameEnd();

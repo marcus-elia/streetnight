@@ -178,12 +178,56 @@ void GameManager::updateCurrentChunks()
 // =================================
 void GameManager::makeTrain()
 {
+    // Make the train come from in front of the player
     double randAngle = player.getXZAngle() + (rand() % 100)*PI/4 / 100 - (rand() % 100)*PI/2 / 100;
     double x = player.getLocation().x + cos(randAngle)*viewDistance;
     double y = TRAIN_HEIGHT/2;
     double z = player.getLocation().z + sin(randAngle)*viewDistance;
     double trainAngle = atan2(player.getLocation().z - z, player.getLocation().x - x);
     train = Train({x,y,z}, TRAIN_COLOR, TRAIN_WIDTH, TRAIN_HEIGHT, TRAIN_LENGTH, TRAIN_SPEED, trainAngle);
+}
+
+// =================================
+//
+//             Coins
+//
+// =================================
+void GameManager::spawnRandomlyLocatedCoin()
+{
+    double distanceAwayFromPlayer = (rand() % 3*viewDistance/4) + 3*viewDistance/4;
+    double randAngle = (rand() % 100)*2*PI / 100;
+    double x = player.getLocation().x + cos(randAngle)*distanceAwayFromPlayer;
+    double y = COIN_FLOAT_HEIGHT + COIN_RADIUS;
+    double z = player.getLocation().z + sin(randAngle)*distanceAwayFromPlayer;
+    coins.push_back(std::make_shared<Coin>(Coin({x,y,z}, COIN_RADIUS, COIN_THICKNESS, COIN_ROTATION_SPEED, COIN_COLOR)));
+}
+void GameManager::checkCoins()
+{
+    int L = coins.size();
+    int i = 0;
+    while(i < L)
+    {
+        std::shared_ptr<Coin> c = coins[i];
+        // First check if the coin is too far away and should despawn
+        if(distance2d(c->getLocation(), player.getLocation()) > 2*viewDistance)
+        {
+            coins.erase(coins.begin() + i);
+            L -= 1;
+            i--;
+        }
+        // If not, check if the player is hitting the coin
+        else if(c->hasCollision(player.getLocation(), PLAYER_RADIUS))
+        {
+            coins.erase(coins.begin() + i);
+            L -= 1;
+            i--;
+        }
+        i++;
+    }
+    if(coins.size() < MAX_NUM_COINS)
+    {
+        spawnRandomlyLocatedCoin();
+    }
 }
 
 // =================================
@@ -366,6 +410,7 @@ void GameManager::draw() const
         drawChunks();
         drawLampPosts();
         drawTrain();
+        drawCoins();
     }
 }
 void GameManager::drawLampPosts() const
@@ -394,6 +439,14 @@ void GameManager::drawTrain() const
     double lightLevel = determineOverallLightLevelAt(train.getLocation());
     train.draw(lightLevel);
 }
+void GameManager::drawCoins() const
+{
+    for(std::shared_ptr<Coin> c : coins)
+    {
+        double lightLevel = determineOverallLightLevelAt(c->getLocation());
+        c->draw(lightLevel);
+    }
+}
 
 
 // ================================
@@ -408,6 +461,7 @@ void GameManager::tick()
         updateLampPostCloseness();
         trainTick();
         playerTick();
+        coinsTick();
         checkForGameEnd();
     }
 }
@@ -440,6 +494,14 @@ void GameManager::trainTick()
     {
         makeTrain();
     }
+}
+void GameManager::coinsTick()
+{
+    for(std::shared_ptr<Coin> c : coins)
+    {
+        c->tick();
+    }
+    checkCoins();
 }
 
 // ===========================================
