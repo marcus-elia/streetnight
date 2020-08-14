@@ -10,6 +10,11 @@ private:
     double radius;
     double thickness;
     double xzAngle;
+    int hoverPeriod;
+    int hoverAmplitude;
+    double hoverScaleFactor; // from the derivative of sin()
+    int tickNumberModHoverPeriod;
+    double hoverSpeed;
     double rotationSpeed;
     RGBAcolor color;
     std::vector<std::shared_ptr<Solid>> solids;
@@ -17,7 +22,7 @@ private:
 public:
     Coin();
     Coin(Point inputLocation, double inputRadius, double inputThickness, double inputRotationSpeed,
-            RGBAcolor inputColor);
+            RGBAcolor inputColor, int inputHoverPeriod, int inputHoverAmplitude);
 
     void initializeSolids();
     void initializeHitbox();

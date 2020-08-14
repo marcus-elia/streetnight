@@ -200,7 +200,7 @@ void GameManager::spawnRandomlyLocatedCoin()
     double x = player.getLocation().x + cos(randAngle)*distanceAwayFromPlayer;
     double y = COIN_FLOAT_HEIGHT + COIN_RADIUS;
     double z = player.getLocation().z + sin(randAngle)*distanceAwayFromPlayer;
-    coins.push_back(std::make_shared<Coin>(Coin({x,y,z}, COIN_RADIUS, COIN_THICKNESS, COIN_ROTATION_SPEED, COIN_COLOR)));
+    coins.push_back(std::make_shared<Coin>(Coin({x,y,z}, COIN_RADIUS, COIN_THICKNESS, COIN_ROTATION_SPEED, COIN_COLOR, COIN_HOVER_PERIOD, COIN_HOVER_AMPLITUDE)));
 }
 void GameManager::checkCoins()
 {

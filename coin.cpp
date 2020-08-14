@@ -7,17 +7,27 @@ Coin::Coin()
     thickness = 8;
     rotationSpeed = 0.1;
     color = {1.0, 0.8, 0.1, 1.0};
+    hoverPeriod = 60;
+    tickNumberModHoverPeriod = 0;
+    hoverSpeed = hoverPeriod / (2*PI);
+    hoverAmplitude = 6;
+    hoverScaleFactor = hoverAmplitude*2*PI/hoverPeriod;
     initializeSolids();
     initializeHitbox();
 }
 Coin::Coin(Point inputLocation, double inputRadius, double inputThickness, double inputRotationSpeed,
-        RGBAcolor inputColor)
+        RGBAcolor inputColor, int inputHoverPeriod, int inputHoverAmplitude)
 {
     location = inputLocation;
     radius = inputRadius;
     thickness = inputThickness;
     rotationSpeed = inputRotationSpeed;
     color = inputColor;
+    hoverPeriod = inputHoverPeriod;
+    hoverAmplitude = inputHoverAmplitude;
+    tickNumberModHoverPeriod = 0;
+    hoverSpeed = hoverPeriod / (2*PI);
+    hoverScaleFactor = hoverAmplitude*2*PI/hoverPeriod;
     initializeSolids();
     initializeHitbox();
 }
@@ -90,6 +100,14 @@ void Coin::tick()
         s->rotate(0, rotationSpeed, 0);
     }
     hitbox.rotate(0, rotationSpeed, 0);
+
+    tickNumberModHoverPeriod++;
+    hoverSpeed = hoverScaleFactor*sin(2*PI*tickNumberModHoverPeriod / hoverPeriod);
+    move(0, hoverSpeed, 0);
+    if(tickNumberModHoverPeriod == hoverPeriod)
+    {
+        tickNumberModHoverPeriod = 0;
+    }
 }
 
 bool Coin::hasCollision(Point p, double buffer) const

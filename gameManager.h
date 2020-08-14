@@ -104,6 +104,8 @@ private:
     int MAX_NUM_COINS = 5;
     double COIN_ATTRACTION_DISTANCE = 30;
     double COIN_ATTRACTION_FORCE = 1;
+    int COIN_HOVER_PERIOD = 60;
+    int COIN_HOVER_AMPLITUDE = 3;
 public:
     GameManager();
     GameManager(int inputScreenWidth, int inputScreenHeight, int inputChunkSize, int inputRenderRadius);
