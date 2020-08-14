@@ -29,6 +29,7 @@ public:
     double getXZAngle() const;
 
     void setXZAngle(double inputAngle);
+    void move(double deltaX, double deltaY, double deltaZ);
 
     void draw(double lightLevel) const;
     void tick();

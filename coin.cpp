@@ -66,6 +66,15 @@ void Coin::setXZAngle(double inputAngle)
         xzAngle = inputAngle;
     }
 }
+void Coin::move(double deltaX, double deltaY, double deltaZ)
+{
+    movePoint(location, deltaX, deltaY, deltaZ);
+    for(std::shared_ptr<Solid> s : solids)
+    {
+        s->move(deltaX, deltaY, deltaZ);
+    }
+    hitbox.move(deltaX, deltaY, deltaZ);
+}
 
 void Coin::draw(double lightLevel) const
 {

@@ -209,8 +209,9 @@ void GameManager::checkCoins()
     while(i < L)
     {
         std::shared_ptr<Coin> c = coins[i];
+        double distanceFromPlayer = distance2d(c->getLocation(), player.getLocation());
         // First check if the coin is too far away and should despawn
-        if(distance2d(c->getLocation(), player.getLocation()) > 2*viewDistance)
+        if(distanceFromPlayer > 2*viewDistance)
         {
             coins.erase(coins.begin() + i);
             L -= 1;
@@ -223,6 +224,13 @@ void GameManager::checkCoins()
             playerScore++;
             L -= 1;
             i--;
+        }
+        else if(distanceFromPlayer < COIN_ATTRACTION_DISTANCE)
+        {
+            double angleToPlayer = xzAngleBetweenPoints(c->getLocation(), player.getLocation());
+            double deltaX = cos(angleToPlayer)*COIN_ATTRACTION_FORCE;
+            double deltaZ = sin(angleToPlayer)*COIN_ATTRACTION_FORCE;
+            c->move(deltaX, 0, deltaZ);
         }
         i++;
     }

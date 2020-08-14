@@ -102,6 +102,8 @@ private:
     double COIN_ROTATION_SPEED = 0.01;
     RGBAcolor COIN_COLOR = {1.0, 0.8, 0.1, 1.0};
     int MAX_NUM_COINS = 5;
+    double COIN_ATTRACTION_DISTANCE = 30;
+    double COIN_ATTRACTION_FORCE = 1;
 public:
     GameManager();
     GameManager(int inputScreenWidth, int inputScreenHeight, int inputChunkSize, int inputRenderRadius);
