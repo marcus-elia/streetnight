@@ -21,6 +21,7 @@ class GameManager
 private:
     Player player;
     int playerHealth;
+    int playerScore;
 
     // Controls
     bool wKey, aKey, sKey, dKey, spacebar;
@@ -181,6 +182,7 @@ public:
     void drawCursor() const;
     void displayInstructions() const;
     void drawHealthBar() const;
+    void displayPlayerScore() const;
 };
 
 #endif //FPS_TEMPLATE_GAMEMANAGER_H

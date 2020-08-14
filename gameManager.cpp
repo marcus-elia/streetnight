@@ -46,6 +46,7 @@ void GameManager::initializePlayer()
                     PLAYER_HEIGHT, PLAYER_RADIUS, MAX_DISTANCE_FROM_SPAWN, GRAVITY, PLAYER_JUMP_AMOUNT);
     currentPlayerChunkID = getChunkIDContainingPoint(player.getLocation(), chunkSize);
     playerHealth = MAX_PLAYER_HEALTH;
+    playerScore = 0;
 }
 
 void GameManager::initializeButtons()
@@ -219,6 +220,7 @@ void GameManager::checkCoins()
         else if(c->hasCollision(player.getLocation(), PLAYER_RADIUS))
         {
             coins.erase(coins.begin() + i);
+            playerScore++;
             L -= 1;
             i--;
         }
@@ -443,8 +445,11 @@ void GameManager::drawCoins() const
 {
     for(std::shared_ptr<Coin> c : coins)
     {
-        double lightLevel = determineOverallLightLevelAt(c->getLocation());
-        c->draw(lightLevel);
+        if(distance2d(c->getLocation(), player.getLocation()) < viewDistance)
+        {
+            double lightLevel = determineOverallLightLevelAt(c->getLocation());
+            c->draw(lightLevel);
+        }
     }
 }
 
@@ -551,6 +556,7 @@ void GameManager::drawUI() const
     {
         drawCursor();
         drawHealthBar();
+        displayPlayerScore();
     }
     else if(currentStatus == Paused)
     {
@@ -612,4 +618,15 @@ void GameManager::drawHealthBar() const
     glVertex2f(HEALTH_BAR_LENGTH, screenHeight - HEALTH_BAR_HEIGHT);
     glVertex2f(HEALTH_BAR_LENGTH, screenHeight);
     glEnd();
+}
+
+void GameManager::displayPlayerScore() const
+{
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+    std::string score = "Score: " + std::to_string(playerScore);
+    glRasterPos2i(screenWidth - (20 * score.length()), screenHeight - 15);
+    for(const char &letter : score)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, letter);
+    }
 }
