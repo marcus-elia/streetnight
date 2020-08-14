@@ -102,6 +102,11 @@ double distance3d(Point p1, Point p2)
                 (p1.z - p2.z)*(p1.z - p2.z));
 }
 
+double xzAngleBetweenPoints(Point base, Point other)
+{
+    return atan2(other.z - base.z, other.x - base.x);
+}
+
 bool isAboveLineXZPlane(Point p, double m, double b)
 {
     return p.z < m*p.x + b; // Reverse inequality because up is negative z

@@ -31,6 +31,8 @@ double distance2d(Point p1, Point p2);
 
 double distance3d(Point p1, Point p2);
 
+double xzAngleBetweenPoints(Point base, Point other);
+
 // m and b represent a line such that z = mx + b.
 // This determines if p lies above the line in the xz plane
 bool isAboveLineXZPlane(Point p, double m, double b);
