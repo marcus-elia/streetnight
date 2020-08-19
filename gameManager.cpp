@@ -184,8 +184,10 @@ void GameManager::makeTrain()
     double x = player.getLocation().x + cos(randAngle)*viewDistance;
     double y = TRAIN_HEIGHT/2;
     double z = player.getLocation().z + sin(randAngle)*viewDistance;
-    double trainAngle = atan2(player.getLocation().z - z, player.getLocation().x - x);
-    train = Train({x,y,z}, TRAIN_COLOR, TRAIN_WIDTH, TRAIN_HEIGHT, TRAIN_LENGTH, TRAIN_SPEED, trainAngle);
+    Point trainLocation = {x, y, z};
+    Point trainTarget = predictMovement(trainLocation, TRAIN_SPEED, player.getLocation(), player.getVelocity());
+    double trainAngle = atan2(trainTarget.z - z, trainTarget.x - x);
+    train = Train(trainLocation, TRAIN_COLOR, TRAIN_WIDTH, TRAIN_HEIGHT, TRAIN_LENGTH, TRAIN_SPEED, trainAngle);
 }
 
 // =================================

@@ -64,6 +64,10 @@ double determineLightIntensityAt(Point target, LightSource source, double fadeFa
 // Takes into account field of view to determine light level
 double determineLightLevelAt(Point target, LightSource source, double fadeFactor);
 
+// Returns the point that the train should aim for if the target moves with a constant
+// velocity
+Point predictMovement(Point location, double speed, Point targetLocation, Point targetVelocity);
+
 // Working in the xz-plane, assume there is a rectangle centered at c that is aligned with the x,z-axes
 // with xw and zw as its dimensions. This returns the Point with adjusted x and z  coordinates to move
 // p exactly buffer away from the rectangle.
