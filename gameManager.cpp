@@ -391,7 +391,7 @@ void GameManager::createRandomLampPost(Point chunkCenter, int chunkSize)
     double z = chunkCenter.z + chunkSize/2 - (rand() % chunkSize);
     Point location = {x, LAMP_POST_HEIGHT/2, z};
     std::shared_ptr<LampPost> lamp = std::make_shared<LampPost>(LampPost(location, LAMP_POST_RADIUS, LAMP_POST_HEIGHT,
-            LAMP_POST_RADIUS+1, LAMP_POST_RADIUS*2, LAMP_POST_COLOR, LIGHT_COLOR, MAX_LIGHT_LEVEL/2));
+            LAMP_POST_RADIUS, LAMP_POST_HEIGHT/6, LAMP_POST_COLOR, LIGHT_COLOR, MAX_LIGHT_LEVEL/2));
     lampPosts[lamp] = false;
     lightSources.push_back({lamp->getLightLocation(), 0, 0, 2*PI, static_cast<int>(lamp->getLightIntensity())});
 }

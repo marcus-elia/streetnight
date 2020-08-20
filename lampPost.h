@@ -2,6 +2,8 @@
 #define STREETNIGHT_LAMPPOST_H
 
 #include "recPrism.h"
+#include "ellipticCyl.h"
+#include "frustum.h"
 #include <vector>
 #include <memory>
 
@@ -13,6 +15,7 @@ private:
     double poleHeight;
     double lightRadius;
     double lightHeight;
+    double baseHeight;
     RGBAcolor poleColor;
     RGBAcolor lightColor;
     double lightIntensity;

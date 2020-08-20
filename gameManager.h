@@ -82,7 +82,7 @@ private:
     double PLAYER_LIGHT_FOV = PI/4;
     int MAX_LIGHT_LEVEL = 10;
     double LAMP_POST_HEIGHT = 30;
-    double LAMP_POST_RADIUS = 2;
+    double LAMP_POST_RADIUS = 0.5;
     RGBAcolor LAMP_POST_COLOR = {0, 0.3, 0.1, 1.0};
     RGBAcolor LIGHT_COLOR = {1.0, 1.0, 0.5, 1.0};
     double TRAIN_SPEED = 2.5;
