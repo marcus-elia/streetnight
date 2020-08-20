@@ -17,6 +17,17 @@ EllipticCyl::EllipticCyl(Point inputCenter, RGBAcolor inputColor,
     initializeCorners();
     initializeLinePoints();
 }
+EllipticCyl::EllipticCyl(Point inputCenter, RGBAcolor inputColor,
+            double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+            double inputTopXWidth, double inputTopZWidth,
+            linesDrawnEnum inputLinesDrawn) :
+        Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor, inputLinesDrawn)
+{
+    topXWidth = inputTopXWidth;
+    topZWidth = inputTopZWidth;
+    initializeCorners();
+    initializeLinePoints();
+}
 
 void EllipticCyl::initializeCorners()
 {
