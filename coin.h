@@ -2,6 +2,7 @@
 #define STREETNIGHT_COIN_H
 
 #include "recPrism.h"
+#include "ellipticCyl.h"
 
 class Coin
 {
@@ -12,7 +13,7 @@ private:
     double xzAngle;
     int hoverPeriod;
     int hoverAmplitude;
-    double hoverScaleFactor; // from the derivative of sin()
+    double hoverScaleFactor; // chain rule from the derivative of sin()
     int tickNumberModHoverPeriod;
     double hoverSpeed;
     double rotationSpeed;
