@@ -57,10 +57,12 @@ public:
     void setXZAngle(double inputAngle); // doesn't rotate the corners, just sets the angle
 
 
-    // Moving
+    virtual // Moving
     void move(double deltaX, double deltaY, double deltaZ);
-    void rotate(double thetaX, double thetaY, double thetaZ);
-    void rotateAroundPoint(const Point &ownerCenter, double thetaX, double thetaY, double thetaZ);
+
+    virtual void rotate(double thetaX, double thetaY, double thetaZ);
+
+    virtual void rotateAroundPoint(const Point &ownerCenter, double thetaX, double thetaY, double thetaZ);
 
     virtual void draw(double lightLevel) const = 0;
 };

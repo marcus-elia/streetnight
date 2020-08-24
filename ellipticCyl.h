@@ -10,6 +10,10 @@ private:
     double topXWidth;
     double topZWidth;
 
+    Point topCenter, bottomCenter; // These need to be kept track of when the cylinder rotates.
+    // Because this wasn't in my original design, it's an easier fix to make separate variables
+    // rather than put them into the corners vector.
+
     const static int distanceBetweenHighLines = 8;
     const static int distanceBetweenMediumLines = 32;
     const static int distanceBetweenLowLines = 56;
@@ -48,6 +52,10 @@ public:
     void drawLines(double lightLevel) const;
     void drawFaces(double lightLevel) const;
     void drawGridLines(double lightLevel) const;
+
+    void move(double deltaX, double deltaY, double deltaZ) override;
+    void rotate(double deltaX, double deltaY, double deltaZ) override;
+    void rotateAroundPoint(const Point &p, double deltaX, double deltaY, double deltaZ) override;
 };
 
 #endif //STREETNIGHT_ELLIPTICCYL_H

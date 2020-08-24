@@ -41,6 +41,8 @@ void EllipticCyl::initializeCorners()
         corners.push_back({center.x + xTop, center.y + yWidth/2, center.z + zTop}); // upper face
         corners.push_back({center.x + x, center.y - yWidth/2, center.z + z}); // lower face
     }
+    topCenter = {center.x, center.y + yWidth/2, center.z};
+    bottomCenter = {center.x, center.y - yWidth/2, center.z};
 }
 
 void EllipticCyl::initializeLinePoints()
@@ -172,7 +174,7 @@ void EllipticCyl::drawFaces(double lightLevel) const
     // Draw the top and bottom circles
     glBegin(GL_TRIANGLE_FAN);
     // center
-    drawPoint({center.x, center.y + yWidth/2, center.z});
+    drawPoint(topCenter);
     // top circumference
     for(int i = 0; i < smoothness; i++)
     {
@@ -183,7 +185,7 @@ void EllipticCyl::drawFaces(double lightLevel) const
 
     glBegin(GL_TRIANGLE_FAN);
     // center
-    drawPoint({center.x, center.y - yWidth/2, center.z});
+    drawPoint(bottomCenter);
     // bottom circumference
     for(int i = 0; i < smoothness; i++)
     {
@@ -228,4 +230,23 @@ void EllipticCyl::drawGridLines(double lightLevel) const
     }
 
     glEnd();
+}
+
+void EllipticCyl::move(double deltaX, double deltaY, double deltaZ)
+{
+    Solid::move(deltaX, deltaY, deltaZ);
+    movePoint(topCenter, deltaX, deltaY, deltaZ);
+    movePoint(bottomCenter, deltaX, deltaY, deltaZ);
+}
+void EllipticCyl::rotate(double deltaX, double deltaY, double deltaZ)
+{
+    Solid::rotate(deltaX, deltaY, deltaZ);
+    rotatePointAroundPoint(topCenter, center, deltaX, deltaY, deltaZ);
+    rotatePointAroundPoint(bottomCenter, center, deltaX, deltaY, deltaZ);
+}
+void EllipticCyl::rotateAroundPoint(const Point &p, double deltaX, double deltaY, double deltaZ)
+{
+    Solid::rotateAroundPoint(p, deltaX, deltaY, deltaZ);
+    rotatePointAroundPoint(topCenter, p, deltaX, deltaY, deltaZ);
+    rotatePointAroundPoint(bottomCenter, p, deltaX, deltaY, deltaZ);
 }
