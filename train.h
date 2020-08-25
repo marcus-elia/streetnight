@@ -2,6 +2,7 @@
 #define STREETNIGHT_TRAIN_H
 
 #include "recPrism.h"
+#include "ellipticCyl.h"
 #include "mathHelper.h"
 #include <vector>
 #include <memory>

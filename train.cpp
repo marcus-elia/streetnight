@@ -36,9 +36,24 @@ void Train::initializeVelocity()
 }
 void Train::initializeSolids()
 {
-    std::shared_ptr<RecPrism> body = std::make_shared<RecPrism>(RecPrism(location, color, xWidth, yWidth, zWidth, {1,1,1,1}));
-    body->rotate(0, xzAngle - 3*PI/2, 0);
-    solids.push_back(body);
+    // Main tank
+    Point center = {location.x, location.y + yWidth/2 - xWidth/2 , location.z - zWidth/8};
+    std::shared_ptr<EllipticCyl> mainTank = std::make_shared<EllipticCyl>(EllipticCyl(center, color, xWidth, 3*zWidth/4, xWidth, {1,1,1,1}));
+    mainTank->rotate(PI/2, 0, 0);
+    mainTank->rotateAroundPoint(location, 0, xzAngle - 3*PI/2, 0);
+    solids.push_back(mainTank);
+
+    // Back
+    center = {location.x, location.y, location.z + 3*zWidth/8};
+    std::shared_ptr<RecPrism> back = std::make_shared<RecPrism>(RecPrism(center, color, xWidth, yWidth, zWidth/4, {1,1,1,1}));
+    back->rotateAroundPoint(location, 0, xzAngle - 3*PI/2, 0);
+    solids.push_back(back);
+
+    // Base
+    center = {location.x, location.y - xWidth/2, location.z};
+    std::shared_ptr<RecPrism> base = std::make_shared<RecPrism>(RecPrism(center, color, xWidth, yWidth - xWidth, zWidth, {1,1,1,1}));
+    base->rotate(0, xzAngle - 3*PI/2, 0);
+    solids.push_back(base);
 }
 void Train::initializeHitbox()
 {

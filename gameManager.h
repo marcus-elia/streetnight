@@ -86,7 +86,7 @@ private:
     RGBAcolor LAMP_POST_COLOR = {0, 0.3, 0.1, 1.0};
     RGBAcolor LIGHT_COLOR = {1.0, 1.0, 0.5, 1.0};
     double TRAIN_SPEED = 2.5;
-    double TRAIN_WIDTH = 30;
+    double TRAIN_WIDTH = 20;
     double TRAIN_HEIGHT = 30;
     double TRAIN_LENGTH = 60;
     RGBAcolor TRAIN_COLOR = {0.0, 0.0, 0.2, 1.0};
