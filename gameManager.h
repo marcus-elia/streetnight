@@ -62,7 +62,7 @@ private:
     // Game parameters
     double PLAYER_HEIGHT = 20;
     double PLAYER_RADIUS = 5;
-    RGBAcolor CHUNK_GROUND_COLOR = {0, 1, 0, 1};
+    RGBAcolor CHUNK_GROUND_COLOR = {0.4, 0.4, 0.4, 1};
     double PLAYER_SPEED = 2;
     double MOUSE_SENSITIVITY = 0.03;
     int MAX_DISTANCE_FROM_SPAWN = 10240;
@@ -85,7 +85,7 @@ private:
     double LAMP_POST_RADIUS = 0.5;
     RGBAcolor LAMP_POST_COLOR = {0, 0.3, 0.1, 1.0};
     RGBAcolor LIGHT_COLOR = {1.0, 1.0, 0.5, 1.0};
-    double TRAIN_SPEED = 2.5;
+    double TRAIN_SPEED = 3.0;
     double TRAIN_WIDTH = 20;
     double TRAIN_HEIGHT = 30;
     double TRAIN_LENGTH = 60;
@@ -101,7 +101,7 @@ private:
     double COIN_THICKNESS = 1.5;
     double COIN_ROTATION_SPEED = 0.01;
     RGBAcolor COIN_COLOR = {1.0, 0.8, 0.1, 1.0};
-    int MAX_NUM_COINS = 5;
+    int MAX_NUM_COINS = 8;
     double COIN_ATTRACTION_DISTANCE = 30;
     double COIN_ATTRACTION_FORCE = 1;
     int COIN_HOVER_PERIOD = 60;
@@ -187,6 +187,7 @@ public:
     void displayInstructions() const;
     void drawHealthBar() const;
     void displayPlayerScore() const;
+    void displayFinalScore() const;
 };
 
 #endif //FPS_TEMPLATE_GAMEMANAGER_H

@@ -63,7 +63,8 @@ void GameManager::initializeButtons()
 
 void GameManager::makeInstructions()
 {
-    instructions.push_back("Use w,a,s,d to move and spacebar to jump. Press p to pause.");
+    instructions.emplace_back("Use w,a,s,d to move and spacebar to jump. Press p to pause.");
+    instructions.emplace_back("Earn points by collecting coins. If a train hits you, you will lose health.");
 }
 
 void GameManager::initializePlayerLight()
@@ -575,6 +576,7 @@ void GameManager::drawUI() const
     }
     else if(currentStatus == End)
     {
+        displayFinalScore();
         playAgainButton.draw();
         quitButton.draw();
     }
@@ -598,7 +600,7 @@ void GameManager::drawCursor() const
 
 void GameManager::displayInstructions() const
 {
-    setGLColor(BLACK);
+    setGLColor({1,1,1,1});
     for(int i = 0; i < instructions.size(); i++)
     {
         std::string s = instructions[i];
@@ -635,6 +637,16 @@ void GameManager::displayPlayerScore() const
     glColor4f(1.0, 1.0, 1.0, 1.0);
     std::string score = "Score: " + std::to_string(playerScore);
     glRasterPos2i(screenWidth - (20 * score.length()), screenHeight - 15);
+    for(const char &letter : score)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, letter);
+    }
+}
+void GameManager::displayFinalScore() const
+{
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+    std::string score = "Final Score: " + std::to_string(playerScore);
+    glRasterPos2i(screenWidth/2 - (4 * score.length()), screenHeight - 15);
     for(const char &letter : score)
     {
         glutBitmapCharacter(GLUT_BITMAP_9_BY_15, letter);
