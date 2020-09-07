@@ -10,14 +10,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++14 -Wno-deprecated -Werror=ret
 
 find_package (OpenGL REQUIRED)
 
-if (APPLE)
+if (UNIX)
     find_package(GLUT REQUIRED)
-endif (APPLE)
+endif (UNIX)
 
 if (WIN32)
     include_directories(${OPENGL_INCLUDE_DIR}  ${FREEGLUT_INCLUDE_DIRS})
     link_directories(${FREEGLUT_LIBRARY_DIRS})
-elseif (APPLE)
+elseif (UNIX)
     include_directories(${OPENGL_INCLUDE_DIR}  ${GLUT_INCLUDE_DIRS})
 endif ()
 
@@ -34,7 +34,7 @@ add_executable(testing testing.cpp testing.cpp structs.h mathHelper.cpp mathHelp
 if (WIN32)
     target_link_libraries (graphics ${OPENGL_LIBRARIES} freeglut)
     target_link_libraries (testing ${OPENGL_LIBRARIES} freeglut)
-elseif (APPLE)
+elseif (UNIX)
     target_link_libraries (graphics ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES})
     target_link_libraries (testing ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES})
 endif ()
